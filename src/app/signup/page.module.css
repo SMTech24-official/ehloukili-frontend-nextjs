@@ -1,0 +1,10 @@
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .rightImage {
+    display: none;
+  }
+}
