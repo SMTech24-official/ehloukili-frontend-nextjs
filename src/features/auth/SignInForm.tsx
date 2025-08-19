@@ -3,10 +3,10 @@
 
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import Input from '@/components/Input';
-import PasswordInput from '@/components/PasswordInput';
-import Button from '@/components/Button';
-import FormCard from '@/components/FormCard';
+import Input from '@/components/ui/Input';
+import PasswordInput from '@/components/ui/PasswordInput';
+import Button from '@/components/ui/Button';
+import FormCard from '@/components/ui/FormCard';
 
 interface SignInFormValues {
   email: string;
@@ -86,14 +86,14 @@ const SignInForm: React.FC = () => {
               </label>
             )}
           />
-          <a href="/forgot-password" className="text-[#86542C] text-sm font-medium hover:underline">Forgot password?</a>
+          <a href="/auth/forgot-password" className="text-[var(--color-primary-600)] text-sm font-medium hover:underline">Forgot password?</a>
         </div>
-        <Button type="submit" disabled={isSubmitting} className="bg-[#86542C] hover:bg-[#6d441c]">
+        <Button type="submit" disabled={isSubmitting} className="bg-[var(--color-primary-600)] hover:bg-[var(--color-primary-700)] !text-white w-full">
           {isSubmitting ? 'Signing in...' : 'Sign in'}
         </Button>
         <p className="text-center text-sm text-gray-600">
           Don&#39;t have an account?{' '}
-          <a href="/signup" className="text-[#86542C] font-medium hover:underline">Sign up</a>
+          <a href="/auth/signup" className="text-[var(--color-primary-600)] font-medium hover:underline">Sign up</a>
         </p>
       </form>
     </FormCard>

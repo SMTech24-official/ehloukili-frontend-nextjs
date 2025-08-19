@@ -1,15 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
 
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import Input from '@/components/Input';
-import PasswordInput from '@/components/PasswordInput';
-import DateInput from '@/components/DateInput';
-import Button from '@/components/Button';
-import Select from '@/components/Select';
-import FormCard from '@/components/FormCard';
+import Input from '@/components/ui/Input';
+import PasswordInput from '@/components/ui/PasswordInput';
+import Button from '@/components/ui/Button';
+import Select from '@/components/ui/Select';
+import FormCard from '@/components/ui/FormCard';
 import { SignUpFormValues } from './types';
+import Link from 'next/link';
 
 const roleOptions = [
   { label: 'User', value: 'user' },
@@ -46,7 +47,8 @@ const SignUpForm: React.FC = () => {
           rules={{ required: 'Role is required.' }}
           render={({ field }) => (
             <Select
-              {...field}
+              value={field.value}
+              onChange={field.onChange}
               label="Your role*"
               options={roleOptions}
               error={errors.role?.message}
@@ -105,12 +107,12 @@ const SignUpForm: React.FC = () => {
           )}
         />
         <p className="text-xs text-gray-500">Must be at least 8 characters.</p>
-        <Button type="submit" disabled={isSubmitting} className="bg-[#86542C] hover:bg-[#6d441c]">
+        <Button type="submit" disabled={isSubmitting} className="bg-[var(--color-primary-600)] hover:bg-[var(--color-primary-700)] !text-white w-full">
           {isSubmitting ? 'Creating account...' : 'Create account'}
         </Button>
         <p className="text-center text-sm text-gray-600">
           Already have an account?{' '}
-          <a href="/login" className="text-[#86542C] font-medium hover:underline">Log in</a>
+          <Link href="/auth/login" className="text-[var(--color-primary-600)] font-medium hover:underline">Log in</Link>
         </p>
       </form>
     </FormCard>
