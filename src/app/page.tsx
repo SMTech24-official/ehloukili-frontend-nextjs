@@ -5,8 +5,8 @@ import FeaturedPropertiesSection from '@/components/landing/FeaturedPropertiesSe
 import ExploreCitiesSection from '@/components/landing/ExploreCitiesSection';
 import HowItWorksSection from '@/components/landing/HowItWorksSection';
 import PromoBanner from '@/components/landing/PromoBanner';
-import Footer from '@/components/landing/Footer';
-import Navbar from '@/components/landing/Navbar';
+import Footer from '@/components/shared/Footer';
+import Navbar from '@/components/shared/Navbar';
 
 export default function Home() {
   return (
