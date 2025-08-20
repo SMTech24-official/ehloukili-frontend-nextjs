@@ -3,11 +3,30 @@
 import * as React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { ChevronDown, Heart, Menu, X } from 'lucide-react';
 import Button from '@/components/ui/Button';
 
 const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const pathname = usePathname();
+
+  // Helper function to determine if a link is active
+  const isActiveLink = (href: string) => {
+    if (href === '/') {
+      return pathname === '/';
+    }
+    return pathname.startsWith(href);
+  };
+
+  // Helper function to get link classes
+  const getLinkClasses = (href: string) => {
+    const baseClasses = "font-medium transition-colors";
+    const activeClasses = "text-[var(--color-secondary-600)]";
+    const inactiveClasses = "text-[var(--color-neutral-700)] hover:text-[var(--color-secondary-600)]";
+    
+    return `${baseClasses} ${isActiveLink(href) ? activeClasses : inactiveClasses}`;
+  };
 
   return (
     <header className="bg-gradient-to-r from-[#E4EDF7] to-[#F6F6F9] border-b border-gray-200 sticky top-0 z-50">
@@ -15,19 +34,19 @@ const Navbar: React.FC = () => {
         <div className="flex justify-between items-center h-16">
           {/* Left side - Navigation Links */}
           <nav className="hidden lg:flex items-center space-x-8">
-            <Link href="/" className="text-[var(--color-secondary-600)] hover:text-[var(--color-secondary-700)] font-medium transition-colors">
+            <Link href="/" className={getLinkClasses('/')}>
               Home
             </Link>
-            <Link href="/sale" className="text-[var(--color-neutral-700)] hover:text-[var(--color-secondary-600)] font-medium transition-colors">
+            <Link href="/sale" className={getLinkClasses('/sale')}>
               Sale
             </Link>
-            <Link href="/rent" className="text-[var(--color-neutral-700)] hover:text-[var(--color-secondary-600)] font-medium transition-colors">
+            <Link href="/rent" className={getLinkClasses('/rent')}>
               Rent
             </Link>
-            <Link href="/submit-property" className="text-[var(--color-neutral-700)] hover:text-[var(--color-secondary-600)] font-medium transition-colors">
+            <Link href="/submit-property" className={getLinkClasses('/submit-property')}>
               Submit Your Property
             </Link>
-            <Link href="/pricing" className="text-[var(--color-neutral-700)] hover:text-[var(--color-secondary-600)] font-medium transition-colors">
+            <Link href="/pricing" className={getLinkClasses('/pricing')}>
               Pricing
             </Link>
           </nav>
@@ -84,19 +103,19 @@ const Navbar: React.FC = () => {
         {mobileMenuOpen && (
           <div className="lg:hidden border-t border-gray-200 py-4">
             <nav className="flex flex-col space-y-4">
-              <Link href="/" className="text-[var(--color-secondary-600)] hover:text-[var(--color-secondary-700)] font-medium transition-colors">
+              <Link href="/" className={getLinkClasses('/')}>
                 Home
               </Link>
-              <Link href="/sale" className="text-[var(--color-neutral-700)] hover:text-[var(--color-secondary-600)] font-medium transition-colors">
+              <Link href="/sale" className={getLinkClasses('/sale')}>
                 Sale
               </Link>
-              <Link href="/rent" className="text-[var(--color-neutral-700)] hover:text-[var(--color-secondary-600)] font-medium transition-colors">
+              <Link href="/rent" className={getLinkClasses('/rent')}>
                 Rent
               </Link>
-              <Link href="/submit-property" className="text-[var(--color-neutral-700)] hover:text-[var(--color-secondary-600)] font-medium transition-colors">
+              <Link href="/submit-property" className={getLinkClasses('/submit-property')}>
                 Submit Your Property
               </Link>
-              <Link href="/pricing" className="text-[var(--color-neutral-700)] hover:text-[var(--color-secondary-600)] font-medium transition-colors">
+              <Link href="/pricing" className={getLinkClasses('/pricing')}>
                 Pricing
               </Link>
               <div className="pt-4 border-t border-gray-200 flex flex-col space-y-3">
