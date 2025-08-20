@@ -1,8 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 /* Global Resets and Base Styles */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -10,7 +12,8 @@ html:focus-within {
   scroll-behavior: smooth;
 }
 
-html, body {
+html,
+body {
   height: 100%;
 }
 
@@ -22,12 +25,19 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-img, picture, video, canvas, svg {
+img,
+picture,
+video,
+canvas,
+svg {
   display: block;
   max-width: 100%;
 }
 
-input, button, textarea, select {
+input,
+button,
+textarea,
+select {
   font: inherit;
   color: inherit;
 }
@@ -47,63 +57,95 @@ button {
   font-family: 'Roboto', Arial, sans-serif;
 }
 
-/* Theme Tokens */
+/* Utility classes */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+}
+
 :root {
+
+  --color-neutral-50: #F9FAFB;
+  --color-neutral-100: #F3F4F6;
+  --color-neutral-200: #E5E7EB;
+  --color-neutral-300: #D1D5DB;
+  --color-neutral-400: #9CA3AF;
+  --color-neutral-500: #6B7280;
+  --color-neutral-600: #4B5563;
+  --color-neutral-700: #374151;
+  --color-neutral-800: #1F2937;
+  --color-neutral-900: #1A1A1A;
   /* Background and Foreground */
   --background: #ffffff;
   --foreground: #171717;
 
-  /* Primary (brand) – warm brown palette */
-  --color-primary-50:  #F8F3EF;
-  --color-primary-100: #F1E5DA;
-  --color-primary-200: #E3CCB6;
-  --color-primary-300: #D4B392;
-  --color-primary-400: #C69A6E;
-  --color-primary-500: #B8814A;
-  --color-primary-600: #8B5C2A;
-  --color-primary-700: #6D441C;
-  --color-primary-800: #523416;
-  --color-primary-900: #3B2510;
+  /* Button color */
+  --color-button-bg: #415A63;
 
-  /* Secondary (teal) */
-  --color-secondary-50:  #F0FDFA;
-  --color-secondary-100: #CCFBF1;
-  --color-secondary-200: #99F6E4;
-  --color-secondary-300: #5EEAD4;
-  --color-secondary-400: #2DD4BF;
-  --color-secondary-500: #14B8A6;
-  --color-secondary-600: #0D9488;
-  --color-secondary-700: #0F766E;
-  --color-secondary-800: #115E59;
-  --color-secondary-900: #134E4A;
+  /* Primary (brand) – teal palette */
+  --color-primary-200: #99F6E4;
+  --color-primary-300: #5EEAD4;
+  --color-primary-400: #2DD4BF;
+  --color-primary-500: #14B8A6;
+  --color-primary-600: #1F4B43;
+  --color-primary-700: #1A4037;
+  --color-primary-800: #16342B;
+  --color-primary-900: #12281F;
 
-  /* Accent (amber) */
-  --color-accent-50:  #FFFBEB;
-  --color-accent-100: #FEF3C7;
-  --color-accent-200: #FDE68A;
-  --color-accent-300: #FCD34D;
-  --color-accent-400: #FBBF24;
-  --color-accent-500: #F59E0B;
-  --color-accent-600: #D97706;
-  --color-accent-700: #B45309;
-  --color-accent-800: #92400E;
-  --color-accent-900: #78350F;
+  /* Secondary (brown) */
+  --color-secondary-50: #FDF7F0;
+  --color-secondary-100: #F7E6D3;
+  --color-secondary-200: #F0CDA6;
+  --color-secondary-300: #E8B47A;
+  --color-secondary-400: #D69B4D;
+  --color-secondary-500: #B8814A;
+  --color-secondary-600: #86542C;
+  --color-secondary-700: #6D441C;
+  --color-secondary-800: #523416;
+  --color-secondary-900: #3B2510;
 
-  /* Neutral (slate-like) */
-  --color-neutral-50:  #F8FAFC;
-  --color-neutral-100: #F1F5F9;
-  --color-neutral-200: #E2E8F0;
-  --color-neutral-300: #CBD5E1;
-  --color-neutral-400: #94A3B8;
-  --color-neutral-500: #64748B;
-  --color-neutral-600: #475569;
-  --color-neutral-700: #334155;
-  --color-neutral-800: #1E293B;
-  --color-neutral-900: #0F172A;
+  /* Accent (orange) */
+  --color-accent-50: #FFF7ED;
+  --color-accent-100: #FFEDD5;
+  --color-accent-200: #FED7AA;
+  --color-accent-300: #FDBA74;
+  --color-accent-400: #FB923C;
+  --color-accent-500: #F97316;
+  --color-accent-600: #EA580C;
+  --color-accent-700: #C2410C;
+  --color-accent-800: #9A3412;
+  --color-accent-900: #7C2D12;
+
+  /* Button color */
+  --color-button-bg: #415A63;
+
+  /* Neutral (custom) */
+  --color-neutral-50: #F9FAFB;
+  --color-neutral-100: #F3F4F6;
+  --color-neutral-200: #E5E7EB;
+  --color-neutral-300: #D1D5DB;
+  --color-neutral-400: #9CA3AF;
+  --color-neutral-500: #6B7280;
+  --color-neutral-600: #4B5563;
+  --color-neutral-700: #374151;
+  --color-neutral-800: #1F2937;
+  --color-neutral-900: #1A1A1A;
 
   /* Semantic */
   /* Success (green) */
-  --color-success-50:  #F0FDF4;
+  --color-success-50: #F0FDF4;
   --color-success-100: #DCFCE7;
   --color-success-200: #BBF7D0;
   --color-success-300: #86EFAC;
@@ -115,7 +157,7 @@ button {
   --color-success-900: #14532D;
 
   /* Warning (amber) */
-  --color-warning-50:  #FFFBEB;
+  --color-warning-50: #FFFBEB;
   --color-warning-100: #FEF3C7;
   --color-warning-200: #FDE68A;
   --color-warning-300: #FCD34D;
@@ -127,7 +169,7 @@ button {
   --color-warning-900: #78350F;
 
   /* Error (red) */
-  --color-error-50:  #FEF2F2;
+  --color-error-50: #FEF2F2;
   --color-error-100: #FEE2E2;
   --color-error-200: #FECACA;
   --color-error-300: #FCA5A5;
@@ -139,7 +181,7 @@ button {
   --color-error-900: #7F1D1D;
 
   /* Info (blue) */
-  --color-info-50:  #EFF6FF;
+  --color-info-50: #EFF6FF;
   --color-info-100: #DBEAFE;
   --color-info-200: #BFDBFE;
   --color-info-300: #93C5FD;
@@ -158,7 +200,7 @@ button {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
-  --color-primary-50:  var(--color-primary-50);
+  --color-primary-50: var(--color-primary-50);
   --color-primary-100: var(--color-primary-100);
   --color-primary-200: var(--color-primary-200);
   --color-primary-300: var(--color-primary-300);
@@ -169,7 +211,7 @@ button {
   --color-primary-800: var(--color-primary-800);
   --color-primary-900: var(--color-primary-900);
 
-  --color-secondary-50:  var(--color-secondary-50);
+  --color-secondary-50: var(--color-secondary-50);
   --color-secondary-100: var(--color-secondary-100);
   --color-secondary-200: var(--color-secondary-200);
   --color-secondary-300: var(--color-secondary-300);
@@ -180,7 +222,7 @@ button {
   --color-secondary-800: var(--color-secondary-800);
   --color-secondary-900: var(--color-secondary-900);
 
-  --color-accent-50:  var(--color-accent-50);
+  --color-accent-50: var(--color-accent-50);
   --color-accent-100: var(--color-accent-100);
   --color-accent-200: var(--color-accent-200);
   --color-accent-300: var(--color-accent-300);
@@ -191,7 +233,7 @@ button {
   --color-accent-800: var(--color-accent-800);
   --color-accent-900: var(--color-accent-900);
 
-  --color-neutral-50:  var(--color-neutral-50);
+  --color-neutral-50: var(--color-neutral-50);
   --color-neutral-100: var(--color-neutral-100);
   --color-neutral-200: var(--color-neutral-200);
   --color-neutral-300: var(--color-neutral-300);
@@ -202,7 +244,7 @@ button {
   --color-neutral-800: var(--color-neutral-800);
   --color-neutral-900: var(--color-neutral-900);
 
-  --color-success-50:  var(--color-success-50);
+  --color-success-50: var(--color-success-50);
   --color-success-100: var(--color-success-100);
   --color-success-200: var(--color-success-200);
   --color-success-300: var(--color-success-300);
@@ -213,7 +255,7 @@ button {
   --color-success-800: var(--color-success-800);
   --color-success-900: var(--color-success-900);
 
-  --color-warning-50:  var(--color-warning-50);
+  --color-warning-50: var(--color-warning-50);
   --color-warning-100: var(--color-warning-100);
   --color-warning-200: var(--color-warning-200);
   --color-warning-300: var(--color-warning-300);
@@ -224,7 +266,7 @@ button {
   --color-warning-800: var(--color-warning-800);
   --color-warning-900: var(--color-warning-900);
 
-  --color-error-50:  var(--color-error-50);
+  --color-error-50: var(--color-error-50);
   --color-error-100: var(--color-error-100);
   --color-error-200: var(--color-error-200);
   --color-error-300: var(--color-error-300);
@@ -235,7 +277,7 @@ button {
   --color-error-800: var(--color-error-800);
   --color-error-900: var(--color-error-900);
 
-  --color-info-50:  var(--color-info-50);
+  --color-info-50: var(--color-info-50);
   --color-info-100: var(--color-info-100);
   --color-info-200: var(--color-info-200);
   --color-info-300: var(--color-info-300);

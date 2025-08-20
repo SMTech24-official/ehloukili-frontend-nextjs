@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 
-export type ButtonColor = 'primary' | 'secondary' | 'destructive' | 'ghost';
+export type ButtonColor = 'primary' | 'secondary' | 'destructive' | 'ghost' | 'outline';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -23,13 +23,15 @@ const sizeClass: Record<ButtonSize, string> = {
 
 const colorClass: Record<ButtonColor, string> = {
   primary:
-    'bg-[var(--color-primary-600)] text-white hover:bg-[var(--color-primary-700)] focus-visible:ring-[var(--color-primary-400)]',
+    'bg-[var(--color-button-bg)] text-white hover:bg-[var(--color-primary-700)] focus-visible:ring-[var(--color-primary-400)]',
   secondary:
     'bg-[var(--color-secondary-600)] text-white hover:bg-[var(--color-secondary-700)] focus-visible:ring-[var(--color-secondary-400)]',
   destructive:
     'bg-[var(--color-error-600)] text-white hover:bg-[var(--color-error-700)] focus-visible:ring-[var(--color-error-400)]',
   ghost:
     'bg-transparent text-[var(--color-foreground)] hover:bg-[color-mix(in_oklab,var(--color-foreground)_8%,transparent)] focus-visible:ring-[var(--color-neutral-300)]',
+  outline:
+    'bg-transparent border border-[var(--color-button-bg)] text-[var(--color-button-bg)] hover:bg-[var(--color-button-bg)] hover:text-white focus-visible:ring-[var(--color-primary-400)]',
 };
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
