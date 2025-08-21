@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Image from 'next/image';
 import { Search, MapPin, Key } from 'lucide-react';
+import { SectionTitle, Subtitle, Heading, Text } from '@/components/ui/Typography';
 
 interface StepProps {
   icon: React.ReactNode;
@@ -15,8 +16,12 @@ const Step: React.FC<StepProps> = ({ icon, title, description }) => {
         {icon}
       </div>
       <div>
-        <h3 className="text-xl font-semibold text-[var(--color-neutral-900)] mb-2">{title}</h3>
-        <p className="text-[var(--color-neutral-600)] leading-relaxed">{description}</p>
+        <Heading level={3} className="mb-2" color="default">
+          {title}
+        </Heading>
+        <Text color="muted" className="leading-relaxed">
+          {description}
+        </Text>
       </div>
     </div>
   );
@@ -45,12 +50,12 @@ const HowItWorksSection: React.FC = () => {
     <section className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-neutral-900)] mb-4">
+          <SectionTitle>
             How It works? Find a perfect home
-          </h2>
-          <p className="text-lg text-[var(--color-neutral-600)] max-w-2xl mx-auto">
+          </SectionTitle>
+          <Subtitle>
             Follow our simple steps to discover, view and move into your ideal home. From browsing to booking, buy to living in - a fully streamlined experience.
-          </p>
+          </Subtitle>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 items-center">

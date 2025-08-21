@@ -2,6 +2,7 @@ import * as React from 'react';
 import Image from 'next/image';
 import Button from '@/components/ui/Button';
 import { ArrowBigRight } from 'lucide-react';
+import { Heading, Text } from '@/components/ui/Typography';
 
 const PromoBanner: React.FC = () => {
   return (
@@ -18,13 +19,13 @@ const PromoBanner: React.FC = () => {
       </div>
       
       <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
+        <Heading level={2} color="default" className="text-black mb-4">
           Discover a place you&apos;ll love to live
-        </h2>
-        <p className="text-xl text-black mb-8 max-w-2xl mx-auto">
+        </Heading>
+        <Text size="xl" color="default" className="text-black mb-8 max-w-2xl mx-auto !text-center">
           Professional real estate development tailored towards you. With love.
           Explore top-tier properties made. Upgrade today.
-        </p>
+        </Text>
         <Button className='!text-white'>
           View Properties <ArrowBigRight className='w-4 h-4 inline-block ml-1' />
         </Button>

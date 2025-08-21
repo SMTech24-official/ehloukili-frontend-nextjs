@@ -2,6 +2,7 @@ import * as React from 'react';
 import Button from '../ui/Button';
 import Link from 'next/link';
 import FeaturedPropertyCard from '../shared/FeaturedPropertyCard';
+import { SectionTitle, Subtitle } from '@/components/ui/Typography';
 
 
 
@@ -69,12 +70,12 @@ const FeaturedPropertiesSection: React.FC = () => {
         <section className="py-20 bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-neutral-900)] mb-4">
+                    <SectionTitle>
                         Discover Our Best Deals
-                    </h2>
-                    <p className="text-lg text-[var(--color-neutral-600)] max-w-2xl mx-auto">
+                    </SectionTitle>
+                    <Subtitle>
                         Unlock exclusive offers on premium properties, with unbeatable prices and exceptional value that goes above home value.
-                    </p>
+                    </Subtitle>
                 </div>
 
                 <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">

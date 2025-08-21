@@ -1,8 +1,9 @@
 'use client';
 
 import * as React from 'react';
-import {  Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 import Image from 'next/image';
+import { Heading, Lead } from '@/components/ui/Typography';
 
 const searchTabs = [
   { label: 'Buy', value: 'buy', active: true },
@@ -30,12 +31,21 @@ const HeroSection: React.FC = () => {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center">
           {/* Hero Text */}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--color-neutral-900)] mb-6 leading-tight">
+          <Heading 
+            level={1} 
+            className="mb-6 leading-tight"
+            color="default"
+          >
             Your Dream Home is Just a Click Away
-          </h1>
-          <p className="text-lg md:text-xl text-[var(--color-neutral-600)] mb-12 max-w-3xl mx-auto">
+          </Heading>
+          
+          <Lead 
+            className="mb-12 max-w-3xl mx-auto"
+            color="muted"
+            align="center"
+          >
             Search for properties, find the perfect place to call home. Connect with listings, qualify homes, and close bookmarks with ease.
-          </p>
+          </Lead>
 
           {/* Search Card */}
           <div className="bg-white rounded-lg shadow-lg p-6 max-w-4xl mx-auto">

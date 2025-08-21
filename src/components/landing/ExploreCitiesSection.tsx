@@ -3,6 +3,7 @@
 import * as React from 'react';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { SectionTitle, Subtitle } from '@/components/ui/Typography';
 
 interface CityCardProps {
   cityName: string;
@@ -113,12 +114,12 @@ const ExploreCitiesSection: React.FC = () => {
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-neutral-900)] mb-4">
+          <SectionTitle>
             Explore Properties in Your City
-          </h2>
-          <p className="text-lg text-[var(--color-neutral-600)] max-w-2xl mx-auto">
+          </SectionTitle>
+          <Subtitle>
             Find the perfect home for sale or rent throughout the country. Search properties in top cities to discover your dream property in a high competitive city.
-          </p>
+          </Subtitle>
         </div>
 
         {/* Carousel Container */}
