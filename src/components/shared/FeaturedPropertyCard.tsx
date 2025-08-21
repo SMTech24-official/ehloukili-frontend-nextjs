@@ -25,7 +25,7 @@ const FeaturedPropertyCard: React.FC<FeaturedPropertyCardProps> = ({
     imageUrl,
 }) => {
     return (
-        <div className="group cursor-pointer bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden min-w-sm">
+        <div className="group cursor-pointer bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden min-w-[18rem]">
             <div className="relative h-60 overflow-hidden">
                 <Image
                     src={imageUrl}
