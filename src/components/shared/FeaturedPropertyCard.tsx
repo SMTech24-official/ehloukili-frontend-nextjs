@@ -1,5 +1,6 @@
 import { Bath, Bed, LocateFixedIcon, Square } from "lucide-react";
 import Image from "next/image";
+import { Heading, Text } from '@/components/ui/Typography';
 
 interface FeaturedPropertyCardProps {
     id: string;
@@ -42,29 +43,41 @@ const FeaturedPropertyCard: React.FC<FeaturedPropertyCardProps> = ({
                 </div>
             </div>
             <div className="p-5">
-                <h3 className="text-lg font-semibold text-[var(--color-neutral-900)] mb-1 line-clamp-1">{title}</h3>
+                <Heading level={5} className="mb-1 line-clamp-1" weight="semibold">
+                    {title}
+                </Heading>
                 <div className="flex items-center gap-1 mb-3 border-b border-[var(--color-neutral-100)] pb-3 ">
                     <LocateFixedIcon className="w-4 h-4" />
-                    <p className="text-sm text-[var(--color-neutral-500)] line-clamp-1">{address}</p>
+                    <Text size="sm" color="light" className="line-clamp-1">
+                        {address}
+                    </Text>
                 </div>
 
                 <div className='flex flex-wrap justify-between items-center'>
-                    <div className="flex items-center gap-4 mb-3 text-sm text-[var(--color-neutral-600)]">
+                    <div className="flex items-center gap-4 mb-3">
                         <div className="flex items-center gap-1">
                             <Bed className="w-4 h-4" />
-                            <span>{bedrooms}</span>
+                            <Text size="sm" color="muted">
+                                {bedrooms}
+                            </Text>
                         </div>
                         <div className="flex items-center gap-1">
                             <Bath className="w-4 h-4" />
-                            <span>{bathrooms}</span>
+                            <Text size="sm" color="muted">
+                                {bathrooms}
+                            </Text>
                         </div>
                         <div className="flex items-center gap-1">
                             <Square className="w-4 h-4" />
-                            <span>{sqft.toLocaleString()}</span>
+                            <Text size="sm" color="muted">
+                                {sqft.toLocaleString()}
+                            </Text>
                         </div>
                     </div>
 
-                    <p className="text-xl font-bold text-[var(--color-secondary-600)]">{price}</p>
+                    <Text size="xl" weight="bold" color="secondary">
+                        {price}
+                    </Text>
                 </div>
             </div>
         </div>

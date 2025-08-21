@@ -37,12 +37,15 @@ const Navbar: React.FC = () => {
             <Link href="/" className={getLinkClasses('/')}>
               Home
             </Link>
-            <Link href="/sale" className={getLinkClasses('/sale')}>
+            {/* <Link href="/sale" className={getLinkClasses('/sale')}>
               Sale
+            </Link> */}
+            <Link href="/property" className={getLinkClasses('/property')}>
+              Property
             </Link>
-            <Link href="/rent" className={getLinkClasses('/rent')}>
+            {/* <Link href="/rent" className={getLinkClasses('/rent')}>
               Rent
-            </Link>
+            </Link> */}
             <Link href="/submit-property" className={getLinkClasses('/submit-property')}>
               Submit Your Property
             </Link>
@@ -106,12 +109,12 @@ const Navbar: React.FC = () => {
               <Link href="/" className={getLinkClasses('/')}>
                 Home
               </Link>
-              <Link href="/sale" className={getLinkClasses('/sale')}>
-                Sale
+              <Link href="/property" className={getLinkClasses('/property')}>
+                Property
               </Link>
-              <Link href="/rent" className={getLinkClasses('/rent')}>
+              {/* <Link href="/rent" className={getLinkClasses('/rent')}>
                 Rent
-              </Link>
+              </Link> */}
               <Link href="/submit-property" className={getLinkClasses('/submit-property')}>
                 Submit Your Property
               </Link>
