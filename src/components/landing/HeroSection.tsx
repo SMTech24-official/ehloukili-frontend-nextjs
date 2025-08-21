@@ -1,8 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { MapPinHouse, Search, SearchX } from 'lucide-react';
-import Button from '@/components/ui/Button';
+import {  Search } from 'lucide-react';
 import Image from 'next/image';
 
 const searchTabs = [
