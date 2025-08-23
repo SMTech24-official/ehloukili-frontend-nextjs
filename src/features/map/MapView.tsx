@@ -8,6 +8,7 @@ import { mockProperties } from '@/features/map/mockProperties';
 import { useGroupedProperties } from '@/features/map/useGroupedProperties';
 import Select from '@/components/ui/Select';
 import Button from '@/components/ui/Button';
+import LocationSearchInput from '@/components/ui/LocationSearchInput';
 
 
 
@@ -104,25 +105,36 @@ const MapView: React.FC = () => {
 
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-30">
       {/* Filter Bar */}
-      <div className="flex flex-wrap gap-3 mb-6 items-center">
-        <Select
-          value={type}
-          onChange={setType}
-          options={types}
-          className="w-32"
-        />
-        <Select
-          value={location}
-          onChange={setLocation}
-          options={locations}
-          className="w-48"
-        />
-        <Button color="outline" className="ml-auto">Property List</Button>
+      <div className="md:flex items-center bg-white rounded-lg p-2 gap-2 relative z-40 border border-gray-200 flex-wrap">
+        {/* Fixed width Select */}
+        <div className='md:w-32 w-full border border-gray-100 md:border-0'>
+          <Select
+            value={type}
+            onChange={setType}
+            options={types}
+            className="border-none shrink-0 grow-0"
+          />
+        </div>
+
+        <div className="h-6 border-l border-gray-300 hidden md:block" />
+
+        {/* LocationSearchInput takes remaining space */}
+        <div className="flex-1 border border-gray-100 md:border-0">
+          <LocationSearchInput
+            onLocationSelect={(location) => console.log(location)}
+          />
+        </div>
+
+        {/* Button keeps its own size */}
+        <p color="outline" className="ml-auto flex-shrink-0 text-secondary-500 cursor-pointer hidden md:block">
+          Property List
+        </p>
       </div>
+
       {/* Map */}
-      <div className="rounded-2xl overflow-hidden border border-gray-200 bg-white" style={{ height: 800 }}>
+      <div className="rounded-2xl overflow-hidden bg-white relative z-20 pt-20" style={{ height: 800, marginTop: '-2rem' }}>
         <MapContainer center={center as [number, number]} zoom={12} style={{ height: '100%', width: '100%' }} scrollWheelZoom={true}>
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

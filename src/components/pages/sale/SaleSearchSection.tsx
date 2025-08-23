@@ -1,10 +1,10 @@
 'use client';
 
 import * as React from 'react';
-import { Search, Map, SearchCode } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import Select from '@/components/ui/Select';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export interface SearchFilters {
     location: string;
@@ -35,6 +35,7 @@ const SaleSearchSection: React.FC<SaleSearchSectionProps> = ({
     onSearch,
 }) => {
 
+    const router = useRouter();
     return (
         <section className="bg-white border-b border-gray-200">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -194,7 +195,7 @@ const SaleSearchSection: React.FC<SaleSearchSectionProps> = ({
                                 Search
                             </Button>
                         </div>
-                        <div className="text-[var(--color-secondary-600)] px-2 py-3 flex items-center gap-2 cursor-pointer">
+                        <div onClick={()=>router.push('/map-view')} className="text-[var(--color-secondary-600)] px-2 py-3 flex items-center gap-2 cursor-pointer">
                             <Image
                                 src="/homePage/iconMapInhero.svg"
                                 alt="Search"
