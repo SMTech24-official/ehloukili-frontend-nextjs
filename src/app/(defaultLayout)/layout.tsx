@@ -1,5 +1,6 @@
 import Navbar from '@/components/shared/Navbar';
 import Footer from '@/components/shared/Footer';
+import ClientLayout from '../ClientLayout';
 
 export default function DefaultLayout({
   children,
@@ -9,8 +10,10 @@ export default function DefaultLayout({
   return (
     <>
       <Navbar />
-      <main className="min-h-screen">
-        {children}
+      <main className="min-h-[70vh]">
+       <ClientLayout>
+                 {children}
+               </ClientLayout>
       </main>
       <Footer />
     </>

@@ -18,7 +18,7 @@ export default function NotFound() {
             width={180}
             height={45}
             priority
-            className="h-12 w-auto"
+            className="h-30 w-auto"
           />
         </div>
 
@@ -43,7 +43,7 @@ export default function NotFound() {
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
           <Link href="/">
-            <Button className="bg-[var(--color-primary-600)] hover:bg-[var(--color-primary-700)] text-white flex items-center gap-2">
+            <Button className="bg-[var(--color-primary-600)] hover:bg-[var(--color-primary-700)] !text-white flex items-center gap-2">
               <Home className="w-4 h-4" />
               Go Home
             </Button>
@@ -71,17 +71,14 @@ export default function NotFound() {
         {/* Popular Links */}
         <div className="bg-white rounded-lg shadow-sm border p-6">
           <h3 className="font-semibold text-gray-900 mb-4">Popular Pages</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-            <Link href="/" className="text-[var(--color-primary-600)] hover:text-[var(--color-primary-700)] hover:underline">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm justify-items-center ">
+            <Link href="/" className="text-[var(--color-primary-600)] hover:text-[var(--color-primary-700)] hover:underline text-center">
               Home
             </Link>
-            <Link href="/sale" className="text-[var(--color-primary-600)] hover:text-[var(--color-primary-700)] hover:underline">
-              For Sale
+            <Link href="/property" className="text-[var(--color-primary-600)] hover:text-[var(--color-primary-700)] hover:underline text-center">
+              Property
             </Link>
-            <Link href="/rent" className="text-[var(--color-primary-600)] hover:text-[var(--color-primary-700)] hover:underline">
-              For Rent
-            </Link>
-            <Link href="/contact" className="text-[var(--color-primary-600)] hover:text-[var(--color-primary-700)] hover:underline">
+            <Link href="/contact-us" className="text-[var(--color-primary-600)] hover:text-[var(--color-primary-700)] hover:underline !text-center">
               Contact Us
             </Link>
           </div>

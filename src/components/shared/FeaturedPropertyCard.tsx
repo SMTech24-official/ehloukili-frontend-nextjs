@@ -1,6 +1,8 @@
+'use client'
 import { Bath, Bed, LocateFixedIcon, Square } from "lucide-react";
 import Image from "next/image";
 import { Heading, Text } from '@/components/ui/Typography';
+import { useRouter } from "next/navigation";
 
 interface FeaturedPropertyCardProps {
     id: string;
@@ -15,6 +17,7 @@ interface FeaturedPropertyCardProps {
 }
 
 const FeaturedPropertyCard: React.FC<FeaturedPropertyCardProps> = ({
+    id,
     title,
     address,
     price,
@@ -24,8 +27,11 @@ const FeaturedPropertyCard: React.FC<FeaturedPropertyCardProps> = ({
     sqft,
     imageUrl,
 }) => {
+    const router = useRouter();
     return (
-        <div className="group cursor-pointer bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden min-w-[18rem]">
+        <div
+            onClick={() => router.push(`/property/${id}`)}
+            className="group cursor-pointer bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden min-w-[18rem]">
             <div className="relative h-60 overflow-hidden">
                 <Image
                     src={imageUrl}
