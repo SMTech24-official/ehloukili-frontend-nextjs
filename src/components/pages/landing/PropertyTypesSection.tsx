@@ -1,6 +1,6 @@
-import * as React from 'react';
-import Image from 'next/image';
 import { SectionTitle, Subtitle } from '@/components/ui/Typography';
+import Image from 'next/image';
+import * as React from 'react';
 
 interface PropertyTypeCardProps {
   title: string;
@@ -36,7 +36,7 @@ const propertyTypes = [
   {
     title: 'Modern Villas',
     propertyCount: '1,824 Properties',
-    imageUrl: '/homePage/modernvilla.svg'
+    imageUrl: '/homePage/modernVilla.svg'
   },
   {
     title: 'Apartment Buildings',
