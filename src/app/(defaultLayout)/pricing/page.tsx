@@ -5,6 +5,7 @@ import { Heading, Text } from '@/components/ui/Typography';
 import PricingCard from '@/components/shared/PricingCard';
 import { Check } from 'lucide-react';
 import React from 'react';
+import { useRouter } from 'next/navigation';
 
 const plans = [
 	{
@@ -49,12 +50,18 @@ const plans = [
 ];
 
 export default function PricingPage() {
+    const router = useRouter();
+
+    const handlePricingCardClick = (plan: typeof plans[number]) => {
+        router.push(`/pricing/payment?plan=${plan.name}`);
+    };
+
 	return (
 		<main className="container mx-auto px-4 py-8 max-w-5xl md:pt-20 pt-10">
 			{/* Heading */}
-			<div className="text-center mb-12">
-				<Heading level={2} className="text-3xl md:text-4xl font-bold mb-2">Simple, transparent pricing</Heading>
-				<Text color="muted" className="text-lg">We believe Unilited should be accessible to all companies, no matter the size.</Text>
+			<div className="text-center lg:mb-20 mb-12">
+				<Heading level={3} className="text-3xl md:text-4xl font-bold mb-2">Simple, transparent pricing</Heading>
+				<Text color="muted" className="text-lg !text-center">We believe Unilited should be accessible to all companies, no matter the size.</Text>
 			</div>
 
 			{/* Pricing Cards */}
@@ -76,6 +83,7 @@ export default function PricingPage() {
 						description={plan.description}
 						features={plan.features}
 						popular={plan.popular}
+						onClick={() => handlePricingCardClick(plan)}
 					/>
 				))}
 			</div>
