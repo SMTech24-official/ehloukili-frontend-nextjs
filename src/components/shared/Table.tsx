@@ -83,7 +83,8 @@ export function Table<T extends object>({ columns, data, renderActions }: TableP
                 <div className="overflow-x-auto w-full">
                     <div className="inline-block min-w-full align-middle">
                         <div className="relative">
-                            <table className="min-w-max divide-y divide-gray-200 dark:divide-gray-700">
+                            {/* className="w-full table-fixed divide-y divide-gray-200 dark:divide-gray-700" */}
+                            <table className="min-w-max w-full divide-y divide-gray-200 dark:divide-gray-700">
                                 <thead className="bg-gray-50 dark:bg-gray-700">
                                     <tr>
                                         {columns.map((col, index) => (

@@ -37,16 +37,13 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
 
             {/* Sidebar */}
             <aside
-                className={`fixed z-50 inset-y-0 left-0 w-64 bg-white dark:bg-[var(--color-neutral-900)] border-r border-gray-200 dark:border-[var(--color-neutral-800)] flex flex-col transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 lg:z-auto ${open ? "translate-x-0" : "-translate-x-full"
+                className={`fixed h-screen z-50 inset-y-0 left-0 w-64 bg-gray-50 dark:bg-[var(--color-neutral-900)]dark:border-[var(--color-neutral-800)] flex flex-col transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 lg:z-auto ${open ? "translate-x-0" : "-translate-x-full"
                     }`}
             >
                 {/* Logo Section */}
-                <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-[var(--color-neutral-800)]">
+                <div className="flex items-center justify-between px-6 py-4 bg-gray-50 dark:border-[var(--color-neutral-800)]">
                     <div className="flex items-center gap-2">
-                        <Image src="/logo.svg" alt="Logo" width={32} height={32} className="flex-shrink-0" />
-                        <span className="font-bold text-lg tracking-tight text-[var(--color-primary-600)] dark:text-[var(--color-primary-400)]">
-                            Domettra
-                        </span>
+                        <Image src="/logo.svg" alt="Logo" width={32} height={32} className="flex-shrink-0 w-full" />
                     </div>
                     {/* Close button for mobile */}
                     <button
@@ -65,8 +62,8 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
                             key={item.label}
                             href={item.href}
                             className={`flex items-center px-3 py-2.5 rounded-lg gap-3 transition-all duration-200 font-medium text-sm group ${pathname === item.href
-                                    ? 'bg-[var(--color-primary-50)] dark:bg-[var(--color-primary-900)] text-[var(--color-primary-700)] dark:text-[var(--color-primary-200)] shadow-sm'
-                                    : 'text-[var(--color-neutral-700)] dark:text-[var(--color-neutral-200)] hover:bg-gray-50 dark:hover:bg-[var(--color-neutral-800)] hover:text-[var(--color-neutral-900)] dark:hover:text-[var(--color-neutral-50)]'
+                                ? 'bg-[var(--color-primary-50)] dark:bg-[var(--color-primary-900)] text-[var(--color-primary-700)] dark:text-[var(--color-primary-200)] shadow-sm'
+                                : 'text-[var(--color-neutral-700)] dark:text-[var(--color-neutral-200)] hover:bg-gray-50 dark:hover:bg-[var(--color-neutral-800)] hover:text-[var(--color-neutral-900)] dark:hover:text-[var(--color-neutral-50)]'
                                 }`}
                             onClick={onClose}
                         >
