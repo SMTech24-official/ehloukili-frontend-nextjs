@@ -11,6 +11,7 @@ export interface PricingCardProps {
   popular?: boolean;
   onClick?: () => void;
   isButton?: boolean;
+  isEditButton?: boolean;
 }
 
 const PricingCard: React.FC<PricingCardProps> = ({
@@ -21,6 +22,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
   popular = false,
   onClick,
   isButton = true,
+  isEditButton = false,
 }) => {
   return (
     <div
@@ -45,8 +47,15 @@ const PricingCard: React.FC<PricingCardProps> = ({
       </ul>
       {
         isButton && (
-          <Button className={cn('w-full', popular && 'bg-primary-600 hover:bg-primary-700 !text-white')} onClick={onClick}>
+          <Button className={cn('w-full !text-white', popular && 'bg-primary-600 hover:bg-primary-700 !text-white')} onClick={onClick}>
             Get started
+          </Button>
+        )
+      }
+      {
+        isEditButton && (
+          <Button className={cn('w-full !text-white', popular && 'bg-primary-600 hover:bg-primary-700 !text-white')} onClick={onClick}>
+              Edit Plan   
           </Button>
         )
       }

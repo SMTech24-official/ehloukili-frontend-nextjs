@@ -80,13 +80,13 @@ const columns: { header: string; accessor: keyof ITenant; render?: (item: ITenan
 ];
 
 
-const TenantsPage = () => {
+const AdminAgentsPage = () => {
   const { setPageTitle, setPageSubtitle } = useDashboard();
     const router = useRouter();
 
     useEffect(() => {
-        setPageTitle('My Tenants');
-        setPageSubtitle('Tenants Information');
+        setPageTitle('All Agents');
+        setPageSubtitle('Agents Information');
     }, [setPageTitle, setPageSubtitle]);
 
     const [confirmOpen, setConfirmOpen] = useState(false);
@@ -114,7 +114,7 @@ const TenantsPage = () => {
 
     const renderActions = (item: ITenant) => (
         <div className="flex items-center justify-end gap-2">
-            <Button onClick={() => router.push(`/agent/tenants/${1}`)} color="ghost" title="View"><Eye size={18} /></Button>
+            <Button onClick={() => router.push(`/admin/agents/${1}`)} color="ghost" title="View"><Eye size={18} /></Button>
             <Button color="ghost" title="Edit"><Pencil size={18} /></Button>
             <Button color="ghost" title="Delete" className="text-red-500 hover:text-red-700" onClick={() => handleDeleteClick(item)}><Trash2 size={18} /></Button>
         </div>
@@ -130,6 +130,10 @@ const TenantsPage = () => {
                         className="pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg w-full sm:w-80 bg-white dark:bg-[var(--color-neutral-800)] focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-shadow"
                     />
                 </div>
+                {/* <Button color="primary" className="flex items-center gap-2 !text-white">
+                    <Plus size={20} />
+                    <span>Add New Property</span>
+                </Button> */}
             </div>
             <div className='overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 w-full'>
                 <Table
@@ -151,4 +155,4 @@ const TenantsPage = () => {
     );
 };
 
-export default TenantsPage;
+export default AdminAgentsPage;

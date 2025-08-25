@@ -40,7 +40,7 @@ const chartLabels = ["Mon", "Tue", "Web", "Thu", "Fri", "Sat", "Sun"];
 export default function AdminDashboardPage() {
     const { setPageSubtitle,setPageTitle } = useDashboard();
     useEffect(() => {
-        setPageTitle("Hello Robert 👋🏻");
+        setPageTitle("Hello Admin 👋🏻");
         // Good Morning should be dynamic 
         const currentHour = new Date().getHours();
         if (currentHour < 12) {

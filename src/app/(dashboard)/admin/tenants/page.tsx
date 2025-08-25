@@ -80,12 +80,12 @@ const columns: { header: string; accessor: keyof ITenant; render?: (item: ITenan
 ];
 
 
-const TenantsPage = () => {
+const AdminTenantsPage = () => {
   const { setPageTitle, setPageSubtitle } = useDashboard();
     const router = useRouter();
 
     useEffect(() => {
-        setPageTitle('My Tenants');
+        setPageTitle('All Tenants');
         setPageSubtitle('Tenants Information');
     }, [setPageTitle, setPageSubtitle]);
 
@@ -151,4 +151,4 @@ const TenantsPage = () => {
     );
 };
 
-export default TenantsPage;
+export default AdminTenantsPage;

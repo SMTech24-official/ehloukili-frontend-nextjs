@@ -21,22 +21,20 @@ const agentNavItems = [
 ];
 const adminNavItems = [
     { label: "Dashboard", icon: <Home size={20} />, href: "/admin/dashboard" },
+    { label: "All Agents", icon: <Users size={20} />, href: "/admin/agents" },
+    { label: "All Tenants", icon: <Users size={20} />, href: "/admin/tenants" },
     {
         label: "All Properties",
         icon: <Building2 size={20} />,
         href: "/admin/properties",
-        // children: [
-        //     { label: "All Properties", href: "/agent/properties" },
-        // ],
     },
-    { label: "All Tenants", icon: <Users size={20} />, href: "/admin/tenants" },
     { label: "Pricing Plan", icon: <Tag size={20} />, href: "/admin/pricing" },
 ];
 
 function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
     const pathname = usePathname();
      const router = useRouter();
-     const userRole = "admin" as 'admin' | 'agent';
+     const userRole = pathname.includes("/admin") ? "admin" : "agent";
 
      const navItems = userRole === "admin" ? adminNavItems : agentNavItems;
 
