@@ -6,24 +6,39 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 
-const navItems = [
+const agentNavItems = [
     { label: "Dashboard", icon: <Home size={20} />, href: "/agent/dashboard" },
     {
         label: "All Properties",
         icon: <Building2 size={20} />,
         href: "/agent/properties",
-        children: [
-            { label: "All Properties", href: "/agent/properties" },
-            // Add more if needed
-        ],
+        // children: [
+        //     { label: "All Properties", href: "/agent/properties" },
+        // ],
     },
     { label: "All Tenants", icon: <Users size={20} />, href: "/agent/tenants" },
     { label: "Pricing", icon: <Tag size={20} />, href: "/agent/pricing" },
+];
+const adminNavItems = [
+    { label: "Dashboard", icon: <Home size={20} />, href: "/admin/dashboard" },
+    {
+        label: "All Properties",
+        icon: <Building2 size={20} />,
+        href: "/admin/properties",
+        // children: [
+        //     { label: "All Properties", href: "/agent/properties" },
+        // ],
+    },
+    { label: "All Tenants", icon: <Users size={20} />, href: "/admin/tenants" },
+    { label: "Pricing Plan", icon: <Tag size={20} />, href: "/admin/pricing" },
 ];
 
 function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
     const pathname = usePathname();
      const router = useRouter();
+     const userRole = "admin" as 'admin' | 'agent';
+
+     const navItems = userRole === "admin" ? adminNavItems : agentNavItems;
 
     return (
         <>
@@ -58,7 +73,7 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
 
                 {/* Navigation */}
                 <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-                    {navItems.map((item) => (
+                    {navItems?.map((item) => (
                         <Link
                             key={item.label}
                             href={item.href}
