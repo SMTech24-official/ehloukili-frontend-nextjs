@@ -114,7 +114,7 @@ const AdminTenantsPage = () => {
 
     const renderActions = (item: ITenant) => (
         <div className="flex items-center justify-end gap-2">
-            <Button onClick={() => router.push(`/agent/tenants/${1}`)} color="ghost" title="View"><Eye size={18} /></Button>
+            <Button onClick={() => router.push(`/admin/tenants/${1}`)} color="ghost" title="View"><Eye size={18} /></Button>
             <Button color="ghost" title="Edit"><Pencil size={18} /></Button>
             <Button color="ghost" title="Delete" className="text-red-500 hover:text-red-700" onClick={() => handleDeleteClick(item)}><Trash2 size={18} /></Button>
         </div>
