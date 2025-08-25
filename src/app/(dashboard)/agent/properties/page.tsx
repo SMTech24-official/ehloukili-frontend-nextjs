@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 "use client";
 import { Table } from '@/components/shared/Table';
@@ -6,7 +5,9 @@ import { Button } from '@/components/ui/Button';
 import { useDashboard } from '@/providers/DashboardProvider';
 import { Eye, Pencil, Plus, Search, Trash2 } from 'lucide-react';
 import Image from 'next/image';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import ConfirmModal from '@/components/shared/ConfirmModal';
+import { useRouter } from 'next/navigation';
 
 interface Property {
     name: string;
@@ -69,17 +70,41 @@ const columns: { header: string; accessor: keyof Property; render?: (item: Prope
 
 export default function PropertiesPage() {
     const { setPageTitle, setPageSubtitle } = useDashboard();
+    const router = useRouter();
 
     useEffect(() => {
         setPageTitle('My Properties');
-        setPageSubtitle('View and manage your property listings.');
+        setPageSubtitle('Manage your property listings and details');
     }, [setPageTitle, setPageSubtitle]);
+
+    const [confirmOpen, setConfirmOpen] = useState(false);
+    const [deletingItem, setDeletingItem] = useState<Property | null>(null);
+
+    const handleDeleteClick = (item: Property) => {
+        setDeletingItem(item);
+        setConfirmOpen(true);
+    };
+
+    const handleConfirmDelete = () => {
+        // Demo: just close modal and log
+        setConfirmOpen(false);
+        if (deletingItem) {
+            // Replace with actual delete logic
+            console.log('Deleted:', deletingItem);
+        }
+        setDeletingItem(null);
+    };
+
+    const handleCancelDelete = () => {
+        setConfirmOpen(false);
+        setDeletingItem(null);
+    };
 
     const renderActions = (item: Property) => (
         <div className="flex items-center justify-end gap-2">
-            <Button color="ghost" title="View"><Eye size={18} /></Button>
+            <Button onClick={() => router.push(`/agent/properties/${1}`)} color="ghost" title="View"><Eye size={18} /></Button>
             <Button color="ghost" title="Edit"><Pencil size={18} /></Button>
-            <Button color="ghost" title="Delete" className="text-red-500 hover:text-red-700"><Trash2 size={18} /></Button>
+            <Button color="ghost" title="Delete" className="text-red-500 hover:text-red-700" onClick={() => handleDeleteClick(item)}><Trash2 size={18} /></Button>
         </div>
     );
 
@@ -106,6 +131,15 @@ export default function PropertiesPage() {
                     renderActions={renderActions}
                 />
             </div>
+            <ConfirmModal
+                open={confirmOpen}
+                title="Delete Property?"
+                description={`Are you sure you want to delete "${deletingItem?.name}"? This action cannot be undone.`}
+                confirmText="Yes, Delete"
+                cancelText="Cancel"
+                onConfirm={handleConfirmDelete}
+                onCancel={handleCancelDelete}
+            />
         </div>
     );
 }

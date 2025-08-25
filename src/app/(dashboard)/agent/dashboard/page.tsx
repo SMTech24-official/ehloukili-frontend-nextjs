@@ -2,8 +2,10 @@
 import BookingList from "@/components/shared/BookingList";
 import BookingTimeline from "@/components/shared/BookingTimeline";
 import StatCard from "@/components/shared/StatCard";
+import { useDashboard } from "@/providers/DashboardProvider";
 import { BarChart2, Home, Tag, Users } from "lucide-react";
 import dynamic from "next/dynamic";
+import { useEffect } from "react";
 
 const BookingChart = dynamic(() => import("@/components/shared/BookingChart"), { ssr: false });
 
@@ -36,6 +38,19 @@ const chartData = [60, 80, 65, 90, 70, 85, 75];
 const chartLabels = ["Mon", "Tue", "Web", "Thu", "Fri", "Sat", "Sun"];
 
 export default function AgentDashboardPage() {
+    const { setPageSubtitle,setPageTitle } = useDashboard();
+    useEffect(() => {
+        setPageTitle("Hello Robert 👋🏻");
+        // Good Morning should be dynamic 
+        const currentHour = new Date().getHours();
+        if (currentHour < 12) {
+            setPageSubtitle("Good Morning");
+        } else if (currentHour < 18) {
+            setPageSubtitle("Good Afternoon");
+        } else {
+            setPageSubtitle("Good Evening");
+        }
+    }, [setPageTitle, setPageSubtitle]);
     return (
         <div className="flex flex-col gap-6">
             {/* Stats Cards */}

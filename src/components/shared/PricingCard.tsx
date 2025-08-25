@@ -4,12 +4,13 @@ import Button from '../ui/Button';
 import { cn } from '@/utils/classNames';
 
 export interface PricingCardProps {
-  price: number;
+  price: string | number;
   name: string;
-  description: string;
-  features: string[];
+  description?: string;
+  features?: string[];
   popular?: boolean;
   onClick?: () => void;
+  isButton?: boolean;
 }
 
 const PricingCard: React.FC<PricingCardProps> = ({
@@ -19,6 +20,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
   features,
   popular = false,
   onClick,
+  isButton = true,
 }) => {
   return (
     <div
@@ -34,16 +36,20 @@ const PricingCard: React.FC<PricingCardProps> = ({
       <div className="text-base font-semibold mb-1">{name}</div>
       <div className="text-sm text-gray-500 mb-6">{description}</div>
       <ul className="mb-8 w-full space-y-3">
-        {features.map((feature) => (
+        {features?.map((feature) => (
           <li key={feature} className="flex items-center gap-2 text-base">
             <Check className="w-5 h-5 text-primary-600" />
             <span>{feature}</span>
           </li>
         ))}
       </ul>
-      <Button className={cn('w-full', popular && 'bg-primary-600 hover:bg-primary-700 !text-white')} onClick={onClick}>
-        Get started
-      </Button>
+      {
+        isButton && (
+          <Button className={cn('w-full', popular && 'bg-primary-600 hover:bg-primary-700 !text-white')} onClick={onClick}>
+            Get started
+          </Button>
+        )
+      }
     </div>
   );
 };

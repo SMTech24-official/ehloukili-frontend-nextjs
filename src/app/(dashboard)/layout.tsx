@@ -3,7 +3,7 @@ import { DashboardProvider, useDashboard } from "@/providers/DashboardProvider";
 import { Building2, Home, LogOut, Menu, Tag, Users, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 
 const navItems = [
@@ -23,6 +23,7 @@ const navItems = [
 
 function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
     const pathname = usePathname();
+     const router = useRouter();
 
     return (
         <>
@@ -37,13 +38,13 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
 
             {/* Sidebar */}
             <aside
-                className={`fixed h-screen z-50 inset-y-0 left-0 w-64 bg-gray-50 dark:bg-[var(--color-neutral-900)]dark:border-[var(--color-neutral-800)] flex flex-col transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 lg:z-auto ${open ? "translate-x-0" : "-translate-x-full"
+                className={`fixed min-h-screen z-50 inset-y-0 left-0 lg:w-64 xl:w-72 bg-gray-50 dark:bg-[var(--color-neutral-900)]dark:border-[var(--color-neutral-800)] flex flex-col transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 lg:z-auto ${open ? "translate-x-0" : "-translate-x-full"
                     }`}
             >
                 {/* Logo Section */}
                 <div className="flex items-center justify-between px-6 py-4 bg-gray-50 dark:border-[var(--color-neutral-800)]">
                     <div className="flex items-center gap-2">
-                        <Image src="/logo.svg" alt="Logo" width={32} height={32} className="flex-shrink-0 w-full" />
+                        <Image priority onClick={() => router.push('/')} src="/logo.svg" alt="Logo" width={40} height={40} className="flex-shrink-0 w-full xl:w-50" />
                     </div>
                     {/* Close button for mobile */}
                     <button
@@ -61,7 +62,7 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
                         <Link
                             key={item.label}
                             href={item.href}
-                            className={`flex items-center px-3 py-2.5 rounded-lg gap-3 transition-all duration-200 font-medium text-sm group ${pathname === item.href
+                            className={`flex items-center px-3 py-2.5 rounded-lg gap-3 transition-all duration-200 font-medium text-sm xl:text-base group ${pathname?.includes(item.href)
                                 ? 'bg-[var(--color-primary-50)] dark:bg-[var(--color-primary-900)] text-[var(--color-primary-700)] dark:text-[var(--color-primary-200)] shadow-sm'
                                 : 'text-[var(--color-neutral-700)] dark:text-[var(--color-neutral-200)] hover:bg-gray-50 dark:hover:bg-[var(--color-neutral-800)] hover:text-[var(--color-neutral-900)] dark:hover:text-[var(--color-neutral-50)]'
                                 }`}
@@ -174,7 +175,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
 
             {/* Sidebar */}
             <div className="hidden lg:flex lg:flex-shrink-0">
-                <div className="w-64">
+                <div className="w-64 xl:w-72">
                     <Sidebar open={false} onClose={() => { }} />
                 </div>
             </div>
