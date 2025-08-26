@@ -12,9 +12,11 @@ export default function Home() {
   return (
     <main>
       <Navbar />
-
       <HeroSection />
+      <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
+
       <PropertyTypesSection />
+      </div>
       <FeaturedPropertiesSection />
       <ExploreCitiesSection />
       <HowItWorksSection />

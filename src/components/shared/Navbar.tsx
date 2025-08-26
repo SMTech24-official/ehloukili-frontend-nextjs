@@ -30,7 +30,7 @@ const Navbar: React.FC = () => {
 
   return (
     <header className="bg-gradient-to-r from-[#E4EDF7] to-[#F6F6F9] border-b border-gray-200 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Left side - Navigation Links */}
           <nav className="hidden lg:flex items-center space-x-8">
