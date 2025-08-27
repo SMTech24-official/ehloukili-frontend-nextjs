@@ -13,7 +13,7 @@ export default function UserDashboardLayout({ children }: { children: React.Reac
         name: 'Your name',
         email: 'youname@gmail.com',
         avatarUrl: '/user-avatar.svg',
-        role:'agent'
+        role:'user'
     };
     const [sidebarOpen, setSidebarOpen] = useState(false);
     // Callback to close sidebar from child
@@ -22,7 +22,7 @@ export default function UserDashboardLayout({ children }: { children: React.Reac
     }, []);
 
     return (
-        <div className="relative max-w-7xl sm:px-6 lg:px-8 mx-auto py-10 px-4 min-h-[70vh] flex">
+        <div className="relative container sm:px-6 lg:px-8 mx-auto py-10 px-4 min-h-[70vh] flex">
             {/* Mobile sidebar toggle button */}
             <button
                 className="lg:hidden fixed top-20 left-4 z-40 bg-white border border-gray-200 rounded-full p-2 shadow-md focus:outline-none"

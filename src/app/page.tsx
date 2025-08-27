@@ -16,9 +16,9 @@ export default function Home() {
       <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
 
       <PropertyTypesSection />
-      </div>
       <FeaturedPropertiesSection />
       <ExploreCitiesSection />
+      </div>
       <HowItWorksSection />
       <PromoBanner />
       <Footer />
