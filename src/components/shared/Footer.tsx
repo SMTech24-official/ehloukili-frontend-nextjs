@@ -1,16 +1,16 @@
-import * as React from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
+import { Facebook, Instagram, Linkedin, Twitter } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import * as React from 'react';
 
 const Footer: React.FC = () => {
   return (
     <footer className="bg-[#181A20] text-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="container max-w-7xl min-[100rem]:max-w-[96rem] mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full">
         {/* Top Row - Logo and Newsletter */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12 w-full">
           {/* Left Column - Logo & Description */}
           <div className="space-y-6">
             <div className="flex items-center mb-6">

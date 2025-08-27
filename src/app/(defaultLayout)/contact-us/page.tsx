@@ -1,14 +1,14 @@
 
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Mail, Phone, MapPin, Clock } from 'lucide-react';
-import { Heading, Text } from '@/components/ui/Typography';
-import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
-import dynamic from 'next/dynamic';
+import Input from '@/components/ui/Input';
+import { Heading, Text } from '@/components/ui/Typography';
 import 'leaflet/dist/leaflet.css';
+import { Clock, Mail, MapPin, Phone } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import React, { useEffect, useState } from 'react';
 
 // Dynamic import for map components to avoid SSR issues
 const MapContainer = dynamic(() => import('react-leaflet').then(mod => mod.MapContainer), { ssr: false });
@@ -52,11 +52,11 @@ export default function ContactUsPage() {
 	};
 
 	return (
-		<main className="container mx-auto px-4 py-8 max-w-7xl md:pt-20 pt-10">
+		<main className="container lg:max-w-7xl min-[100rem]:max-w-[96rem] mx-auto px-4 sm:px-6 lg:px-8 py-12">
 			{/* Heading */}
 			<div className="text-center mb-10 flex flex-col gap-4 justify-center items-center">
 				<Heading level={3} className="text-3xl md:text-4xl font-bold mb-2">Contact Us</Heading>
-			<Text color="muted" className="text-lg !text-center">Have questions about our services? We&apos;re here to help. Reach out to our <br /> team for more information.</Text>
+				<Text color="muted" className="text-lg !text-center">Have questions about our services? We&apos;re here to help. Reach out to our <br /> team for more information.</Text>
 			</div>
 
 			{/* Form & Illustration */}
@@ -70,19 +70,19 @@ export default function ContactUsPage() {
 					</div>
 					<Input label="Phone Number" name="phone" value={form.phone} onChange={handleChange} placeholder="Enter Phone Number" required autoComplete="tel" />
 					<Input label="Email" name="email" value={form.email} onChange={handleChange} placeholder="Enter Email" required autoComplete="email" />
-								<div>
-									<label htmlFor="contact-message" className="block text-sm font-medium text-gray-700 mb-2">Message</label>
-									<textarea
-										id="contact-message"
-										name="message"
-										value={form.message}
-										onChange={handleChange}
-										placeholder="Enter Message"
-										required
-										rows={4}
-										className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-									/>
-								</div>
+					<div>
+						<label htmlFor="contact-message" className="block text-sm font-medium text-gray-700 mb-2">Message</label>
+						<textarea
+							id="contact-message"
+							name="message"
+							value={form.message}
+							onChange={handleChange}
+							placeholder="Enter Message"
+							required
+							rows={4}
+							className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+						/>
+					</div>
 					<Button type="submit" className="w-full !text-white">Send Message</Button>
 				</form>
 				{/* Illustration */}

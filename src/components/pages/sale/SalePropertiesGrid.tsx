@@ -1,9 +1,9 @@
 'use client';
 
-import * as React from 'react';
 import FeaturedPropertyCard from '@/components/shared/FeaturedPropertyCard';
 import Button from '@/components/ui/Button';
 import { Heading, Text } from '@/components/ui/Typography';
+import * as React from 'react';
 import { SearchFilters } from './SaleSearchSection';
 
 export interface Property {
@@ -227,10 +227,10 @@ const SalePropertiesGrid: React.FC<SalePropertiesGridProps> = ({
   const [isLoading, setIsLoading] = React.useState(false);
   const [sortBy, setSortBy] = React.useState<SortOption>('newest');
   const propertiesPerPage = 6;
-  
+
   // Get properties based on active tab
   const allProperties = activeTab === 'sale' ? saleProperties : rentProperties;
-  
+
   // Filter properties based on search filters
   const filteredProperties = React.useMemo(() => {
     return allProperties.filter((property) => {
@@ -238,12 +238,12 @@ const SalePropertiesGrid: React.FC<SalePropertiesGridProps> = ({
       if (filters.location !== 'any-location' && property.location !== filters.location) {
         return false;
       }
-      
+
       // Property type filter
       if (filters.propertyType !== 'any-type' && property.propertyType !== filters.propertyType) {
         return false;
       }
-      
+
       // Rooms filter
       if (filters.rooms !== 'any-rooms' && filters.rooms !== '5+') {
         if (property.bedrooms !== parseInt(filters.rooms)) {
@@ -252,12 +252,12 @@ const SalePropertiesGrid: React.FC<SalePropertiesGridProps> = ({
       } else if (filters.rooms === '5+' && property.bedrooms < 5) {
         return false;
       }
-      
+
       // Status filter
       if (filters.status !== 'any-status' && property.status !== filters.status) {
         return false;
       }
-      
+
       // Price filter
       if (filters.priceRange !== 'any-price') {
         const [min, max] = filters.priceRange.split('-').map(v => parseInt(v.replace('+', '')));
@@ -271,15 +271,15 @@ const SalePropertiesGrid: React.FC<SalePropertiesGridProps> = ({
           }
         }
       }
-      
+
       return true;
     });
   }, [allProperties, filters]);
-  
+
   // Sort properties
   const sortedProperties = React.useMemo(() => {
     const sorted = [...filteredProperties];
-    
+
     switch (sortBy) {
       case 'price-low':
         return sorted.sort((a, b) => a.priceValue - b.priceValue);
@@ -294,18 +294,18 @@ const SalePropertiesGrid: React.FC<SalePropertiesGridProps> = ({
         return sorted;
     }
   }, [filteredProperties, sortBy]);
-  
+
   // Calculate pagination
   const totalPages = Math.ceil(sortedProperties.length / propertiesPerPage);
   const startIndex = (currentPage - 1) * propertiesPerPage;
   const endIndex = startIndex + propertiesPerPage;
   const currentProperties = sortedProperties.slice(0, endIndex);
-  
+
   // Reset pagination when filters change
   React.useEffect(() => {
     setCurrentPage(1);
   }, [filters, searchTrigger, activeTab]);
-  
+
   const loadMore = () => {
     if (currentPage < totalPages) {
       setIsLoading(true);
@@ -319,7 +319,7 @@ const SalePropertiesGrid: React.FC<SalePropertiesGridProps> = ({
 
   return (
     <section className="py-8">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container max-w-7xl min-[100rem]:max-w-[96rem] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Results Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <div>
@@ -330,12 +330,12 @@ const SalePropertiesGrid: React.FC<SalePropertiesGridProps> = ({
               Showing {currentProperties.length} of {sortedProperties.length} results
             </Text>
           </div>
-          
+
           {/* Sort & View Options */}
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <Text size="sm" color="muted">Sort by:</Text>
-              <select 
+              <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as SortOption)}
                 className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)] focus:border-transparent bg-white"
@@ -347,7 +347,7 @@ const SalePropertiesGrid: React.FC<SalePropertiesGridProps> = ({
                 <option value="size">Largest Size</option>
               </select>
             </div>
-            
+
             {/* View Toggle - Grid/List (for future enhancement) */}
             <div className="hidden sm:flex items-center gap-1 p-1 bg-gray-100 rounded-md">
               <button className="p-2 rounded bg-white shadow-sm">

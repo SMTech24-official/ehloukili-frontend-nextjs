@@ -1,11 +1,11 @@
 'use client';
 
-import * as React from 'react';
+import Button from '@/components/ui/Button';
+import { ChevronDown, Heart, Menu, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ChevronDown, Heart, Menu, X } from 'lucide-react';
-import Button from '@/components/ui/Button';
+import * as React from 'react';
 
 const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
@@ -24,13 +24,13 @@ const Navbar: React.FC = () => {
     const baseClasses = "font-medium transition-colors";
     const activeClasses = "text-[var(--color-secondary-600)]";
     const inactiveClasses = "text-[var(--color-neutral-700)] hover:text-[var(--color-secondary-600)]";
-    
+
     return `${baseClasses} ${isActiveLink(href) ? activeClasses : inactiveClasses}`;
   };
 
   return (
     <header className="bg-gradient-to-r from-[#E4EDF7] to-[#F6F6F9] border-b border-gray-200 sticky top-0 z-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container lg:max-w-7xl min-[100rem]:max-w-[96rem] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Left side - Navigation Links */}
           <nav className="hidden lg:flex items-center space-x-8">
