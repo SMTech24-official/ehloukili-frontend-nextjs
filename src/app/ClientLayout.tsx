@@ -1,9 +1,11 @@
 'use client';
 
-import * as React from 'react';
-import { LoadingProvider } from '@/providers/LoadingProvider';
-import SplashScreen from '@/components/shared/SplashScreen';
 import { ErrorBoundary } from '@/components/shared/ErrorBoundary';
+import SplashScreen from '@/components/shared/SplashScreen';
+import { LoadingProvider } from '@/providers/LoadingProvider';
+import ReduxProvider from '@/providers/ReduxProvider';
+import ToastProvider from '@/providers/ToastProvider';
+import * as React from 'react';
 
 interface ClientLayoutProps {
   children: React.ReactNode;
@@ -34,9 +36,12 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
 
   return (
     <ErrorBoundary>
-      <LoadingProvider>
-        {children}
-      </LoadingProvider>
+      <ReduxProvider>
+        <LoadingProvider>
+          <ToastProvider />
+          {children}
+        </LoadingProvider>
+      </ReduxProvider>
     </ErrorBoundary>
   );
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import Button from '@/components/ui/Button';
+import { useGetMeQuery } from '@/redux/api/authApi';
 import { ChevronDown, Heart, Menu, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -10,6 +11,10 @@ import * as React from 'react';
 const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const pathname = usePathname();
+
+
+  const { data: user } = useGetMeQuery();
+  console.log(user, 'aa')
 
   // Helper function to determine if a link is active
   const isActiveLink = (href: string) => {

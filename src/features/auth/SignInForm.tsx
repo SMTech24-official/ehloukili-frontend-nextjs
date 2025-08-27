@@ -1,12 +1,18 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 'use client';
 
-import React from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import Input from '@/components/ui/Input';
-import PasswordInput from '@/components/ui/PasswordInput';
 import Button from '@/components/ui/Button';
 import FormCard from '@/components/ui/FormCard';
+import Input from '@/components/ui/Input';
+import PasswordInput from '@/components/ui/PasswordInput';
+import Spinner from '@/components/ui/Spinner';
+import { useLoginMutation } from '@/redux/api/authApi';
+import { setUser } from '@/redux/features/authSlice';
+import { useAppDispatch } from '@/redux/hooks';
+import Cookies from 'js-cookie';
+import React from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 interface SignInFormValues {
   email: string;
@@ -25,11 +31,43 @@ const SignInForm: React.FC = () => {
     defaultValues: initialValues,
     mode: 'onTouched',
   });
+  const [login, { isLoading }] = useLoginMutation();
+  const dispatch = useAppDispatch();
 
   const onSubmit = async (data: SignInFormValues) => {
-    // TODO: Integrate API call here
-    await new Promise((res) => setTimeout(res, 1000));
-    alert('Signed in!');
+    try {
+      const result = await login({ email: data.email, password: data.password }).unwrap();
+      if (result.accessToken) {
+        localStorage.setItem('accessToken', result.accessToken);
+        Cookies.set('accessToken', result.accessToken, { expires: data.remember ? 30 : undefined });
+        // Fetch user profile from /me and update store
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/me`, {
+          headers: { Authorization: `Bearer ${result.accessToken}` },
+        });
+        if (res.ok) {
+          const user = await res.json();
+          dispatch(setUser({
+            email: user.email,
+            role: user.role,
+            userId: user.id,
+            image: user.image || null,
+          }));
+        }
+      }
+      toast.success('Signed in successfully!');
+    } catch (error: unknown) {
+      let message = 'Login failed';
+      if (
+        error &&
+        typeof error === 'object' &&
+        'data' in error &&
+        typeof (error as { data?: { message?: string } }).data === 'object' &&
+        (error as { data?: { message?: string } }).data?.message
+      ) {
+        message = (error as { data: { message: string } }).data.message;
+      }
+      toast.error(message);
+    }
   };
 
   return (
@@ -88,8 +126,13 @@ const SignInForm: React.FC = () => {
           />
           <a href="/auth/forgot-password" className="text-[var(--color-primary-600)] text-sm font-medium hover:underline">Forgot password?</a>
         </div>
-        <Button type="submit" disabled={isSubmitting} className="bg-[var(--color-primary-600)] hover:bg-[var(--color-primary-700)] !text-white w-full">
-          {isSubmitting ? 'Signing in...' : 'Sign in'}
+        <Button type="submit" disabled={isSubmitting || isLoading} className="bg-[var(--color-primary-600)] hover:bg-[var(--color-primary-700)] !text-white w-full flex items-center justify-center">
+          {(isSubmitting || isLoading) ? (
+            <>
+              <Spinner size={20} color="white" />
+              Signing in
+            </>
+          ) : 'Sign in'}
         </Button>
         <p className="text-center text-sm text-gray-600">
           Don&#39;t have an account?{' '}
