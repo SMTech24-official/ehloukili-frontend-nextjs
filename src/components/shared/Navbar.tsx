@@ -14,7 +14,6 @@ const Navbar: React.FC = () => {
 
 
   const { data: user } = useGetMeQuery();
-  console.log(user, 'aa from navbar')
 
   // Helper function to determine if a link is active
   const isActiveLink = (href: string) => {

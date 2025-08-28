@@ -40,9 +40,10 @@ const SignInForm: React.FC = () => {
       if (result?.data) {
         localStorage.setItem('accessToken', result?.data?.token);
         Cookies.set('accessToken', result?.data?.token, { expires: data.remember ? 30 : undefined });
-        toast.success('Signed in successfully!');
-        const redirectLink = result?.data?.role === 'admin' ? '/admin/dashboard' : '/user-dashboard/profile';
+           const redirectLink = result?.data?.user?.role === 'admin' ? '/admin/dashboard' : '/user-dashboard/profile';
         router.push(redirectLink);
+        toast.success('Signed in successfully!');
+     
       }
       
     } catch (error: unknown) {
