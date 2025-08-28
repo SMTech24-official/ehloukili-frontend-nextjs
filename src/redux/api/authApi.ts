@@ -19,6 +19,14 @@ export const authApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["User"],
     }),
+    updateUser: builder.mutation({
+      query: (data) => ({
+        url: "/profile",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["User"],
+    }),
     getMe: builder.query<any, void>({
       query: () => ({
         url: "/me",
@@ -77,14 +85,6 @@ export const authApi = baseApi.injectEndpoints({
         body: data,
       }),
     }),
-    updateUser: builder.mutation({
-      query: (data) => ({
-        url: "/users",
-        method: "PATCH",
-        body: data,
-      }),
-      invalidatesTags: ["User", "all-Users"],
-    }),
     updateUserByAdmin: builder.mutation({
       query: (data: { id: string, data: any }) => ({
         url: `/users/${data.id}`,
@@ -128,15 +128,15 @@ export const authApi = baseApi.injectEndpoints({
 export const {
   useLoginMutation,
   useRegisterMutation,
-  useSocialAuthMutation,
+  useGetMeQuery,
+  useUpdateUserMutation,
   useLogoutMutation,
+  useSocialAuthMutation,
   useForgotPasswordMutation,
   useResendOtpMutation,
   useVerifyOtpMutation,
   useResetPasswordMutation,
   useChangePasswordMutation,
-  useGetMeQuery,
-  useUpdateUserMutation,
   useUpdateUserByAdminMutation,
   useDeleteUserMutation,
   useVerifyUserMutation,

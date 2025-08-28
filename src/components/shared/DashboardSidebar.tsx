@@ -5,22 +5,26 @@ import Link from 'next/link';
 import { User, LogOut, Heart, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import React from 'react';
+import { useLogoutModal } from '@/hooks/useLogout';
+import LogoutModal from './LogoutModal';
 export interface DashboardSidebarProps {
   user: { name: string; email: string; avatarUrl?: string; role?: 'user' | 'agent' };
   onNav?: () => void;
 }
 
-const NAV_ITEMS_USER = [
+const navItems = [
   { key: 'profile', label: 'My Profile', icon: <User size={18} />, href: '/user-dashboard/profile' },
   { key: 'saved', label: 'Save Property', icon: <Heart size={18} />, href: '/user-dashboard/saved-properties' },
+  { key: 'dashboard', label: 'Dashboard', icon: <Heart size={18} />, href: '/agent/dashboard' },
 ];
-const NAV_ITEMS_AGENT = [
-  { key: 'profile', label: 'My Profile', icon: <User size={18} />, href: '/user-dashboard/profile' },
-  { key: 'dashboard', label: 'Dashboard', icon: <Heart size={18} />, href: '/user-dashboard/agent-dashboard' },
-];
+// const NAV_ITEMS_AGENT = [
+//   { key: 'profile', label: 'My Profile', icon: <User size={18} />, href: '/user-dashboard/profile' },
+//   { key: 'dashboard', label: 'Dashboard', icon: <Heart size={18} />, href: '/user-dashboard/agent-dashboard' },
+// ];
 
 export default function DashboardSidebar({ user, onNav }: DashboardSidebarProps) {
   let pathname = usePathname();
+  const { open: isLogoutModal, showModal, hideModal, handleLogout, isLoading } = useLogoutModal();
   // Normalize pathname to remove trailing slash for matching
   if (pathname && pathname.length > 1 && pathname.endsWith('/')) {
     pathname = pathname.slice(0, -1);
@@ -28,7 +32,7 @@ export default function DashboardSidebar({ user, onNav }: DashboardSidebarProps)
   const handleNav = (href: string) => {
     if (onNav) onNav();
   };
-  const navItems = user.role === 'agent' ? NAV_ITEMS_AGENT : NAV_ITEMS_USER;
+  // const navItems = user.role === 'agent' ? NAV_ITEMS_AGENT : NAV_ITEMS_USER;
   return (
     <aside className="bg-white rounded-xl shadow-md p-6 w-full max-w-xs flex flex-col items-center gap-6 min-h-[400px]">
       <Image
@@ -59,13 +63,19 @@ export default function DashboardSidebar({ user, onNav }: DashboardSidebarProps)
             </li>
           ))}
           <li>
-            <button className="flex items-center w-full px-4 py-2 rounded-lg text-left gap-2 text-red-500 hover:bg-red-50 transition-colors">
+            <button onClick={showModal} className="flex items-center w-full px-4 py-2 rounded-lg text-left gap-2 text-red-500 hover:bg-red-50 transition-colors">
               <LogOut size={18} />
               <span className="flex-1">Log Out</span>
             </button>
           </li>
         </ul>
       </nav>
+           <LogoutModal
+                      open={isLogoutModal}
+                      loading={isLoading}
+                      onConfirm={handleLogout}
+                      onCancel={hideModal}
+                  />
     </aside>
   );
 }

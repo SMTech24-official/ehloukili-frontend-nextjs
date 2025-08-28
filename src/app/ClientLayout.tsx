@@ -3,8 +3,8 @@
 import { ErrorBoundary } from '@/components/shared/ErrorBoundary';
 import SplashScreen from '@/components/shared/SplashScreen';
 import { LoadingProvider } from '@/providers/LoadingProvider';
-import ReduxProvider from '@/providers/ReduxProvider';
 import ToastProvider from '@/providers/ToastProvider';
+import ReduxProvider from '@/redux/provider/ReduxProvider';
 import * as React from 'react';
 
 interface ClientLayoutProps {

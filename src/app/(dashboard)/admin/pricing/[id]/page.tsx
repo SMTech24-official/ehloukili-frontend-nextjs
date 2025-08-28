@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
+
 
 "use client";
 import React, { useEffect } from "react";
@@ -9,6 +10,7 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { Textarea } from "@/components/ui/Textarea";
 import { useDashboard } from "@/providers/DashboardProvider";
+import { useLoading } from '@/providers/LoadingProvider';
 
 type FormData = {
   name: string;
@@ -29,7 +31,9 @@ type FormData = {
 
 
 import { useRouter, useParams } from "next/navigation";
-import { useState } from "react";
+import Spinner from '@/components/ui/Spinner';
+import { toast } from 'sonner';
+import { useGetSinglePlanQuery, useUpdatePlanMutation } from "@/redux/api/subscriptionPackage";
 
 const defaultValues: FormData = {
   name: "",
@@ -49,11 +53,23 @@ const defaultValues: FormData = {
 
 
 const EditPricePage = () => {
+
   const router = useRouter();
   const params = useParams();
   const planId = params?.id as string;
-  const [loading, setLoading] = useState(true);
-  const [fetchError, setFetchError] = useState<string | null>(null);
+  const { setLoading, setLoadingText } = useLoading();
+  const { data, isLoading, isError } = useGetSinglePlanQuery(planId, { skip: !planId });
+  const [updatePlan, { isLoading: isUpdating }] = useUpdatePlanMutation();
+  // Show global loading overlay while fetching plan
+  useEffect(() => {
+    if (isLoading) {
+      setLoadingText('Loading plan details...');
+      setLoading(true);
+    } else {
+      setLoading(false);
+    }
+  }, [isLoading]);
+
 
   const {
     register,
@@ -69,65 +85,64 @@ const EditPricePage = () => {
 
   const { setPageTitle, setPageSubtitle } = useDashboard();
 
+
   useEffect(() => {
     setPageTitle("Edit Plan");
     setPageSubtitle("Edit pricing plan details");
   }, [setPageTitle, setPageSubtitle]);
 
+  // Set form values from API
   useEffect(() => {
-    // Fetch plan data by planId
-    async function fetchPlan() {
-      setLoading(true);
-      setFetchError(null);
-      try {
-        // TODO: Replace with real API call
-        // const res = await fetch(`/api/pricing/${planId}`);
-        // const plan = await res.json();
-        // Simulate API response:
-        const plan = {
-          name: "Pro Plan",
-          description: "Best for professionals.",
-          price: "49.99",
-          duration: "MONTHLY" as "FREE" | "MONTHLY" | "YEARLY",
-          durationInDays: "30",
-          state: "PAID" as "PAID" | "FREE",
-          features: [
-            { value: "Unlimited Listings" },
-            { value: "Priority Support" },
-          ],
-          bgColor: "#f3f4f6",
-          textColor: "#111827",
-          isFreePromo: true,
-          freePromoText: "Try free for 7 days!",
-          propertyLimit: 100,
-          isActive: true,
-        };
-        reset(plan);
-      } catch (err) {
-        setFetchError("Failed to load plan data.");
-      } finally {
-        setLoading(false);
-      }
+    if (data?.data) {
+      const plan = data.data;
+      reset({
+        name: plan.name || '',
+        description: plan.description || '',
+        price: plan.price?.toString() || '0',
+        duration: plan.duration || 'FREE',
+        durationInDays: plan.duration_in_days?.toString() || 'UNLIMITED',
+        state: plan.state || 'FREE',
+        features: Array.isArray(plan.features) ? plan.features.map((f: string) => ({ value: f })) : [],
+        bgColor: plan.bg_color || '#ffffff',
+        textColor: plan.text_color || '#000000',
+        isFreePromo: !!plan.is_free_promo,
+        freePromoText: plan.free_promo_text || '',
+        propertyLimit: plan.property_limit || 0,
+        isActive: !!plan.is_active,
+      });
     }
-    if (planId) fetchPlan();
-  }, [planId, reset]);
+  }, [data, reset]);
 
-  const onSubmit = async (data: FormData) => {
+
+  const onSubmit = async (formData: FormData) => {
     try {
       const payload = {
-        ...data,
-        price: parseFloat(data.price),
-        durationInDays: data.durationInDays === "UNLIMITED" ? "UNLIMITED" : parseInt(data.durationInDays),
-        features: data.features.map(f => f.value).filter(f => f.trim() !== ""),
+        name: formData.name,
+        description: formData.description,
+        price: parseFloat(formData.price),
+        duration: formData.duration,
+        duration_in_days: formData.durationInDays === 'UNLIMITED' ? 'UNLIMITED' : parseInt(formData.durationInDays),
+        state: formData.state,
+        features: formData.features.map(f => f.value).filter(f => f.trim() !== ''),
+        property_limit: formData.propertyLimit,
+        bg_color: formData.bgColor,
+        text_color: formData.textColor,
+        is_free_promo: !!formData.isFreePromo,
+        free_promo_text: formData.freePromoText,
+        is_active: !!formData.isActive,
       };
-      // TODO: send payload to API for update
-      // await fetch(`/api/pricing/${planId}`, { method: "PUT", body: JSON.stringify(payload) });
-      // router.push("/admin/pricing");
-    } catch (err) {}
+      await updatePlan({ id: planId, data: payload }).unwrap();
+      toast.success('Plan updated successfully!');
+      router.push('/admin/pricing');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      toast.error(err?.data?.message || 'Failed to update plan.');
+    }
   };
 
-  if (loading) return <div className="p-8">Loading...</div>;
-  if (fetchError) return <div className="p-8 text-red-500">{fetchError}</div>;
+
+  if (isLoading) return <div className="flex justify-center items-center min-h-[200px]"><Spinner size={32} /></div>;
+  if (isError) return <div className="p-8 text-red-500">Failed to load plan data.</div>;
 
   return (
     <form className="max-w-4xl lg:p-6 mb-16" onSubmit={handleSubmit(onSubmit)}>
@@ -304,9 +319,10 @@ const EditPricePage = () => {
           <Button
             className="cursor-pointer bg-primary hover:bg-primary/80 !text-white"
             type="submit"
-            disabled={isSubmitting}
+            disabled={isSubmitting || isUpdating}
+            isLoading={isSubmitting || isUpdating}
           >
-            {isSubmitting ? "Saving..." : "Save Changes"}
+            {(isSubmitting || isUpdating) ? (<><Spinner size={18} className="mr-2" /> Saving...</>) : "Save Changes"}
           </Button>
         </div>
       </div>

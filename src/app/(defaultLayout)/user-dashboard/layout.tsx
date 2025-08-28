@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
+
 import React from 'react';
+import { Star } from 'lucide-react';
 
 import ClientLayout from '@/app/ClientLayout';
 import DashboardSidebar from '@/components/shared/DashboardSidebar';
@@ -14,7 +16,7 @@ export default function UserDashboardLayout({ children }: { children: React.Reac
     const user = {
         name: userData?.profile?.first_name + ' ' + userData?.profile?.last_name || 'Your name',
         email: userData?.profile?.email || 'youname@gmail.com',
-        avatarUrl: userData?.profile?.image || '/user-avatar.svg',
+        avatarUrl: userData?.profile?.image_url || '/user-avatar.svg',
         role: userData?.profile?.role || 'user'
     };
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -22,8 +24,24 @@ export default function UserDashboardLayout({ children }: { children: React.Reac
     const handleSidebarNav = useCallback(() => {
         setSidebarOpen(false);
     }, []);
-
+// To list more than one property, please subscribe to our premium plan
     return (
+       <>
+            <div className="flex justify-center mt-4">
+                <div className="flex items-center gap-3 bg-gradient-to-r from-primary-50 to-primary-100 border border-primary-200 rounded-lg px-6 py-3 shadow-sm">
+                    <Star className="text-primary-500 w-6 h-6 shrink-0" />
+                    <span className="text-gray-800 text-sm md:text-base">
+                        To list more than one property, please subscribe to our{' '}
+                        <a
+                            href="/pricing"
+                            className="text-primary-600 font-semibold underline hover:text-primary-700 transition-colors"
+                        >
+                            premium plan
+                        </a>
+                        .
+                    </span>
+                </div>
+            </div>
         <div className="relative container max-w-7xl min-[100rem]:max-w-[96rem] mx-auto px-4 sm:px-6 lg:px-8 min-h-[70vh] flex py-12">
             {/* Mobile sidebar toggle button */}
             <button
@@ -74,5 +92,6 @@ export default function UserDashboardLayout({ children }: { children: React.Reac
                 </ClientLayout>
             </div>
         </div>
+       </>
     );
 }

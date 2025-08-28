@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 "use client";
 import React, { useEffect } from "react";
@@ -9,6 +9,9 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { Textarea } from "@/components/ui/Textarea";
 import { useDashboard } from "@/providers/DashboardProvider";
+import Spinner from '@/components/ui/Spinner';
+import { toast } from 'sonner';
+import { useCreatePlanMutation } from "@/redux/api/subscriptionPackage";
 
 type FormData = {
   name: string;
@@ -44,6 +47,7 @@ const defaultValues: FormData = {
 };
 
 const AddPricePage = () => {
+
   const {
     register,
     handleSubmit,
@@ -56,6 +60,8 @@ const AddPricePage = () => {
   const state = watch("state");
   const isFreePromo = watch("isFreePromo");
 
+  const [createPlan, { isLoading }] = useCreatePlanMutation();
+
       const { setPageTitle, setPageSubtitle } = useDashboard();
       
           useEffect(() => {
@@ -66,14 +72,26 @@ const AddPricePage = () => {
   const onSubmit = async (data: FormData) => {
     try {
       const payload = {
-        ...data,
+        name: data.name,
+        description: data.description,
         price: parseFloat(data.price),
-        durationInDays: data.durationInDays === "UNLIMITED" ? "UNLIMITED" : parseInt(data.durationInDays),
+        duration: data.duration,
+        duration_in_days: data.durationInDays === "UNLIMITED" ? "UNLIMITED" : parseInt(data.durationInDays),
+        state: data.state,
         features: data.features.map(f => f.value).filter(f => f.trim() !== ""),
+        property_limit: data.propertyLimit,
+        bg_color: data.bgColor,
+        text_color: data.textColor,
+        is_free_promo: !!data.isFreePromo,
+        free_promo_text: data.freePromoText,
+        is_active: !!data.isActive,
       };
-      // TODO: send payload to API
+      await createPlan(payload).unwrap();
+      toast.success('Plan created successfully!');
       reset(defaultValues);
-    } catch (err) {}
+    } catch (err: any) {
+      toast.error(err?.data?.message || 'Failed to create plan.');
+    }
   };
 
 
@@ -252,9 +270,10 @@ const AddPricePage = () => {
           <Button
             className="cursor-pointer bg-primary hover:bg-primary/80 !text-white"
             type="submit"
-            disabled={isSubmitting}
+            disabled={isSubmitting || isLoading}
+            isLoading={isSubmitting || isLoading}
           >
-            {isSubmitting ? "Adding..." : "Add Plan"}
+            {(isSubmitting || isLoading) ? (<><Spinner size={18} className="mr-2" /> Adding</>) : "Add Plan"}
           </Button>
         </div>
       </div>

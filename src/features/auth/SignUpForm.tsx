@@ -68,11 +68,7 @@ const SignUpForm: React.FC = () => {
       };
       const result = await registerUser(payload).unwrap();
       toast.success('Account created successfully!');
-      if (payload.role === 'agent') {
-        router.push('/pricing');
-      } else {
-        router.push('/auth/login');
-      }
+      router.push('/auth/login');
     } catch (error: any) {
       let message = 'Registration failed';
       if (error?.data?.message) {

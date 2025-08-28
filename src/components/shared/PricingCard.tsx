@@ -28,7 +28,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
     <div
       onClick={onClick}
       className={cn(
-        'flex-1 bg-white rounded-2xl shadow-md px-8 py-10 flex flex-col items-center border transition-all duration-200',
+        'flex-1 max-w-md bg-white rounded-2xl shadow-md px-8 py-10 flex flex-col items-center border transition-all duration-200',
         'hover:shadow-xl hover:scale-[1.03] hover:border-primary-500',
         popular ? 'border-primary-500 scale-105 z-10 shadow-lg' : 'border-gray-200'
       )}
