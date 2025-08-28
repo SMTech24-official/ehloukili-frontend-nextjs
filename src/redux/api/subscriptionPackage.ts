@@ -34,6 +34,14 @@ export const subscriptionApi = baseApi.injectEndpoints({
       }),
       providesTags: ["singlePlan"],
     }),
+      createSubscription: builder.mutation({
+      query: (data) => ({
+        url: "/subscription",
+        method: "POST",
+        body: data      ,
+      }),
+      invalidatesTags: ["subscription"],
+    }),
 })
 })
 
@@ -42,4 +50,5 @@ export const {
   useUpdatePlanMutation,
   useGetPlansQuery,
   useGetSinglePlanQuery,
+  useCreateSubscriptionMutation,
 } = subscriptionApi;

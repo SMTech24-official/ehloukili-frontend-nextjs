@@ -9,6 +9,8 @@ import React from 'react';
 import { useGetPlansQuery } from '@/redux/api/subscriptionPackage';
 import Spinner from '@/components/ui/Spinner';
 import { useRouter } from 'next/navigation';
+import { useGetMeQuery } from '@/redux/api/authApi';
+import { toast } from 'sonner';
 
 
 
@@ -16,9 +18,15 @@ import { useRouter } from 'next/navigation';
 export default function PricingPage() {
 	const router = useRouter();
 	const { data, isLoading, isError } = useGetPlansQuery();
+	  const { data: user } = useGetMeQuery();
+
 
 	const handlePricingCardClick = (plan: any) => {
-		router.push(`/pricing/payment?plan=${plan.name}`);
+		if(!user){
+			router.push("/auth/login");
+			return;
+		}
+		router.push(`/pricing/payment?planId=${plan.id}&price=${plan.price}&duration=${plan.duration}&propertyLimit=${plan.property_limit}&planName=${plan.name}`);
 	};
 
 	return (

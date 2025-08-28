@@ -36,12 +36,12 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
 
   return (
     <ErrorBoundary>
-      <ReduxProvider>
-        <LoadingProvider>
-          <ToastProvider />
-          {children}
-        </LoadingProvider>
-      </ReduxProvider>
+        <ReduxProvider>
+          <LoadingProvider>
+            <ToastProvider />
+            {children}
+          </LoadingProvider>
+        </ReduxProvider>
     </ErrorBoundary>
   );
 }

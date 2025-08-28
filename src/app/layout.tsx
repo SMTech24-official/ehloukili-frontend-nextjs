@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "./ClientLayout";
+import StripeProvider from "@/providers/stripe-provider";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -30,6 +31,9 @@ export default function RootLayout({
         className={`${roboto.variable} antialiased font-roboto`}
       >
         <ClientLayout>
+          <StripeProvider>
+            {children}
+          </StripeProvider>
           {children}
         </ClientLayout>
       </body>
