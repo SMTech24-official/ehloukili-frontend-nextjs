@@ -12,6 +12,8 @@ export interface PricingCardProps {
   onClick?: () => void;
   isButton?: boolean;
   isEditButton?: boolean;
+  duration?: 'FREE' | 'MONTHLY' | 'YEARLY';
+  propertyLimit?: number;
 }
 
 const PricingCard: React.FC<PricingCardProps> = ({
@@ -23,7 +25,19 @@ const PricingCard: React.FC<PricingCardProps> = ({
   onClick,
   isButton = true,
   isEditButton = false,
+  duration = 'MONTHLY',
+  propertyLimit,
 }) => {
+  // Determine price label
+  let priceLabel = '';
+  if (duration === 'FREE') {
+    priceLabel = 'Free';
+  } else if (duration === 'YEARLY') {
+    priceLabel = `$${price}/yr`;
+  } else {
+    priceLabel = `$${price}/mth`;
+  }
+
   return (
     <div
       onClick={onClick}
@@ -34,9 +48,12 @@ const PricingCard: React.FC<PricingCardProps> = ({
       )}
       style={popular ? { boxShadow: '0 8px 32px 0 rgba(26,127,100,0.10)' } : {}}
     >
-      <div className="text-3xl font-bold mb-2">${price}/mth</div>
+      <div className="text-3xl font-bold mb-1">{priceLabel}</div>
+      { propertyLimit && (
+        <div className="text-xs text-gray-500 mb-2">Property limit: {propertyLimit}</div>
+      )}
       <div className="text-base font-semibold mb-1">{name}</div>
-      <div className="text-sm text-gray-500 mb-6">{description}</div>
+      <div className="text-sm text-gray-500 mb-6 text-center">{description}</div>
       <ul className="mb-8 w-full space-y-3">
         {features?.map((feature) => (
           <li key={feature} className="flex items-center gap-2 text-base">

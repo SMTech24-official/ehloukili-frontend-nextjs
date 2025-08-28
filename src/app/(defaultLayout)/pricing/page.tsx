@@ -41,13 +41,13 @@ export default function PricingPage() {
 					</div>
 				</div>
 				{isLoading ? (
-					<div className="flex justify-center items-center w-full min-h-[180px]"><Spinner size={32} /></div>
+					<div className="flex justify-center items-center w-full min-h-[180px]"><Spinner size={32} color='black'/></div>
 				) : isError ? (
 					<div className="flex justify-center items-center w-full text-red-500">Failed to load plans. Please try again later.</div>
 				) : !data?.data?.length ? (
 					<div className="flex justify-center items-center w-full text-gray-500">No plans found.</div>
 				) : (
-					data.data.map((plan: any) => (
+					data?.data?.map((plan: any) => (
 						<PricingCard
 							key={plan.id}
 							price={plan.price}
@@ -56,6 +56,8 @@ export default function PricingPage() {
 							features={plan.features}
 							popular={plan.popular || false}
 							onClick={() => handlePricingCardClick(plan)}
+							duration={plan.duration}
+							propertyLimit={plan.property_limit}
 						/>
 					))
 				)}
