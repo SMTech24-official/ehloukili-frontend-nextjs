@@ -5,6 +5,7 @@ import type {
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import Cookies from "js-cookie";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -17,7 +18,8 @@ const rawBaseQuery = fetchBaseQuery({
   credentials: 'include',
   prepareHeaders: (headers) => {
     headers.set("Accept", "application/json");
-    const token = localStorage.getItem("accessToken");
+    // eita first cookie theke nibo then local storage theke nibo
+    const token = Cookies.get("accessToken") || localStorage.getItem("accessToken");
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
     }

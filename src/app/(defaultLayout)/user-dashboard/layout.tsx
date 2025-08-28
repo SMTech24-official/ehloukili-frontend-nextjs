@@ -6,14 +6,16 @@ import ClientLayout from '@/app/ClientLayout';
 import DashboardSidebar from '@/components/shared/DashboardSidebar';
 import { Menu } from 'lucide-react';
 import { useCallback, useState } from 'react';
+import { useGetMeQuery } from '@/redux/api/authApi';
 
 export default function UserDashboardLayout({ children }: { children: React.ReactNode }) {
     // In real app, get user from context or API
+    const { data: userData } = useGetMeQuery();
     const user = {
-        name: 'Your name',
-        email: 'youname@gmail.com',
-        avatarUrl: '/user-avatar.svg',
-        role: 'user'
+        name: userData?.profile?.first_name + ' ' + userData?.profile?.last_name || 'Your name',
+        email: userData?.profile?.email || 'youname@gmail.com',
+        avatarUrl: userData?.profile?.image || '/user-avatar.svg',
+        role: userData?.profile?.role || 'user'
     };
     const [sidebarOpen, setSidebarOpen] = useState(false);
     // Callback to close sidebar from child
@@ -22,7 +24,7 @@ export default function UserDashboardLayout({ children }: { children: React.Reac
     }, []);
 
     return (
-        <div className="relative container lg:max-w-7xl min-[100rem]:max-w-[96rem] mx-auto px-4 sm:px-6 lg:px-8 min-h-[70vh] flex py-12">
+        <div className="relative container max-w-7xl min-[100rem]:max-w-[96rem] mx-auto px-4 sm:px-6 lg:px-8 min-h-[70vh] flex py-12">
             {/* Mobile sidebar toggle button */}
             <button
                 className="lg:hidden fixed top-20 left-4 z-40 bg-white border border-gray-200 rounded-full p-2 shadow-md focus:outline-none"

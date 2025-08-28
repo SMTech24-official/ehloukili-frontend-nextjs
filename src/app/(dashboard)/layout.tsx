@@ -1,4 +1,6 @@
 'use client';
+import LogoutModal from "@/components/shared/LogoutModal";
+import { useLogoutModal } from "@/hooks/useLogout";
 import { DashboardProvider, useDashboard } from "@/providers/DashboardProvider";
 import { Building2, Home, LogOut, Menu, Tag, Users, X } from "lucide-react";
 import Image from "next/image";
@@ -34,6 +36,7 @@ const adminNavItems = [
 function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
     const pathname = usePathname();
      const router = useRouter();
+       const { open:islogoutModal, showModal, hideModal, handleLogout, isLoading } = useLogoutModal();
      const userRole = pathname.includes("/admin") ? "admin" : "agent";
 
      const navItems = userRole === "admin" ? adminNavItems : agentNavItems;
@@ -90,17 +93,24 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
                 </nav>
 
                 {/* Logout Button */}
-                <div className="p-3 border-t border-gray-200 dark:border-[var(--color-neutral-800)]">
-                    <Link
-                        href="/logout"
+                <div 
+                onClick={showModal}
+                className="p-3 border-t border-gray-200 dark:border-[var(--color-neutral-800)] cursor-pointer">
+                    <p
                         className="flex items-center px-3 py-2.5 rounded-lg gap-3 transition-all duration-200 font-medium text-sm text-[var(--color-error-600)] hover:bg-[var(--color-error-50)] dark:hover:bg-[var(--color-error-900)] hover:text-[var(--color-error-700)] dark:hover:text-[var(--color-error-300)]"
                         onClick={onClose}
                     >
                         <LogOut size={20} />
                         <span>Logout</span>
-                    </Link>
+                    </p>
                 </div>
             </aside>
+            <LogoutModal
+                open={islogoutModal}
+                loading={isLoading}
+                onConfirm={handleLogout}
+                onCancel={hideModal}
+            />
         </>
     );
 }

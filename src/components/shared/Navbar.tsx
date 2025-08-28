@@ -14,7 +14,7 @@ const Navbar: React.FC = () => {
 
 
   const { data: user } = useGetMeQuery();
-  console.log(user, 'aa')
+  console.log(user, 'aa from navbar')
 
   // Helper function to determine if a link is active
   const isActiveLink = (href: string) => {
@@ -35,7 +35,7 @@ const Navbar: React.FC = () => {
 
   return (
     <header className="bg-gradient-to-r from-[#E4EDF7] to-[#F6F6F9] border-b border-gray-200 sticky top-0 z-50">
-      <div className="container lg:max-w-7xl min-[100rem]:max-w-[96rem] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container max-w-7xl min-[100rem]:max-w-[96rem] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Left side - Navigation Links */}
           <nav className="hidden lg:flex items-center space-x-8">
@@ -84,12 +84,32 @@ const Navbar: React.FC = () => {
             </button>
 
             {/* Auth buttons */}
-            <Link href="/auth/login" className="text-[var(--color-neutral-700)] hover:text-[var(--color-secondary-600)] font-medium transition-colors">
-              Sign In
-            </Link>
-            <Button asChild size="sm" color='outline'>
-              <Link href="/auth/signup">Sign Up</Link>
-            </Button>
+            {
+              user?.profile?.role === 'user' || user?.profile?.role === 'agent' ? (
+                <Button asChild size="sm" color='outline'>
+                  <Link href="/user-dashboard/profile">Profile</Link>
+                </Button>
+              ) : null
+            }
+            {
+              user?.profile?.role === 'admin' ? (
+                <Button asChild size="sm" color='outline'>
+                  <Link href="/admin/dashboard">Dashboard</Link>
+                </Button>
+              ) : null
+            }
+            {
+              !user?.profile && (
+                <>
+                  <Link href="/auth/login" className="text-[var(--color-neutral-700)] hover:text-[var(--color-secondary-600)] font-medium transition-colors">
+                    Sign In
+                  </Link>
+                  <Button asChild size="sm" color='outline'>
+                    <Link href="/auth/signup">Sign Up</Link>
+                  </Button>
+                </>
+              )
+            }
 
             {/* Language Dropdown */}
             <button className="flex items-center space-x-1 text-[var(--color-neutral-700)] hover:text-[var(--color-secondary-600)] transition-colors">

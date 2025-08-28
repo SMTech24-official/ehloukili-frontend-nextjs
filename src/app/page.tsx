@@ -12,7 +12,7 @@ export default function Home() {
     <main>
       <Navbar />
       <HeroSection />
-      <div className='container lg:max-w-7xl 2xl:max-w-max mx-auto px-4 sm:px-6 lg:px-8'>
+      <div className='container max-w-7xl min-[100rem]:max-w-[96rem] mx-auto px-4 sm:px-6 lg:px-8'>
 
         <PropertyTypesSection />
         <FeaturedPropertiesSection />

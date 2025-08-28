@@ -7,9 +7,8 @@ import Input from '@/components/ui/Input';
 import PasswordInput from '@/components/ui/PasswordInput';
 import Spinner from '@/components/ui/Spinner';
 import { useLoginMutation } from '@/redux/api/authApi';
-import { setUser } from '@/redux/features/authSlice';
-import { useAppDispatch } from '@/redux/hooks';
 import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -32,29 +31,20 @@ const SignInForm: React.FC = () => {
     mode: 'onTouched',
   });
   const [login, { isLoading }] = useLoginMutation();
-  const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const onSubmit = async (data: SignInFormValues) => {
     try {
       const result = await login({ email: data.email, password: data.password }).unwrap();
-      if (result.accessToken) {
-        localStorage.setItem('accessToken', result.accessToken);
-        Cookies.set('accessToken', result.accessToken, { expires: data.remember ? 30 : undefined });
-        // Fetch user profile from /me and update store
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/me`, {
-          headers: { Authorization: `Bearer ${result.accessToken}` },
-        });
-        if (res.ok) {
-          const user = await res.json();
-          dispatch(setUser({
-            email: user.email,
-            role: user.role,
-            userId: user.id,
-            image: user.image || null,
-          }));
-        }
+
+      if (result?.data) {
+        localStorage.setItem('accessToken', result?.data?.token);
+        Cookies.set('accessToken', result?.data?.token, { expires: data.remember ? 30 : undefined });
+        toast.success('Signed in successfully!');
+        const redirectLink = result?.data?.role === 'admin' ? '/admin/dashboard' : '/user-dashboard/profile';
+        router.push(redirectLink);
       }
-      toast.success('Signed in successfully!');
+      
     } catch (error: unknown) {
       let message = 'Login failed';
       if (

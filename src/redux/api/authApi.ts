@@ -13,15 +13,22 @@ export const authApi = baseApi.injectEndpoints({
     }),
     register: builder.mutation({
       query: (credentials) => ({
-        url: "/users/register",
+        url: "/register-subscribe",
         method: "POST",
         body: credentials,
       }),
       invalidatesTags: ["User"],
     }),
+    getMe: builder.query<any, void>({
+      query: () => ({
+        url: "/me",
+        method: "GET",
+      }),
+      providesTags: ["User"],
+    }),
     logout: builder.mutation<any, any>({
       query: () => ({
-        url: "/auth/logout",
+        url: "/logout",
         method: "POST"
       }),
       invalidatesTags: ["User"],
@@ -36,7 +43,7 @@ export const authApi = baseApi.injectEndpoints({
     }),
     forgotPassword: builder.mutation({
       query: (email) => ({
-        url: "/auth/forgot-password",
+        url: "/forgot-password",
         method: "POST",
         body: email,
       }),
@@ -51,14 +58,14 @@ export const authApi = baseApi.injectEndpoints({
     }),
     verifyOtp: builder.mutation({
       query: (data) => ({
-        url: "/auth/verify-otp",
+        url: "/verify-otp",
         method: "POST",
         body: data,
       }),
     }),
     resetPassword: builder.mutation({
       query: (data: { token: string, password: string }) => ({
-        url: "/auth/reset-password?token=" + data.token,
+        url: "/reset-password",
         method: "POST",
         body: { password: data.password },
       }),
@@ -69,13 +76,6 @@ export const authApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
-    }),
-    getMe: builder.query<any, void>({
-      query: () => ({
-        url: "/users/me",
-        method: "GET",
-      }),
-      providesTags: ["User"],
     }),
     updateUser: builder.mutation({
       query: (data) => ({
