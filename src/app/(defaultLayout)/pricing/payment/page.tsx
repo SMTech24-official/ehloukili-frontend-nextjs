@@ -82,7 +82,6 @@ export default function PaymentPage() {
 	}
 
     if (!stripe || !elements) {
-      console.error("Stripe or Elements not loaded");
       toast.error("Stripe is not loaded. Please try refreshing the page.");
       return;
     }
@@ -90,7 +89,6 @@ export default function PaymentPage() {
     try {
       const cardElement = elements.getElement(CardElement);
       if (!cardElement) {
-        console.error("CardElement not found");
         toast.error("Card details are missing. Please try again.");
         return;
       }
