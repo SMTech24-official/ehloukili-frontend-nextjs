@@ -3,13 +3,13 @@
 
 import PricingCard from "@/components/shared/PricingCard";
 import Button from "@/components/ui/Button";
+import Spinner from '@/components/ui/Spinner';
 import { useDashboard } from "@/providers/DashboardProvider";
+import { useLoading } from '@/providers/LoadingProvider';
+import { useGetPlansQuery } from "@/redux/api/subscriptionPackage";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { useLoading } from '@/providers/LoadingProvider';
-import Spinner from '@/components/ui/Spinner';
-import { useGetPlansQuery } from "@/redux/api/subscriptionPackage";
 
 
 
@@ -52,7 +52,7 @@ const PricingPage = () => {
         );
     } else {
         content = (
-            <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 xl:grid-cols-4">
+            <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-[100rem]:grid-cols-4">
                 {data.data.map((plan: any) => (
                     <PricingCard
                         key={plan.id}

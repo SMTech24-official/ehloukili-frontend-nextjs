@@ -2,18 +2,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 "use client";
+import PropertyEditModal from '@/components/pages/dashboard/PropertyEditModal';
+import ConfirmModal from '@/components/shared/ConfirmModal';
 import { Table } from '@/components/shared/Table';
 import { Button } from '@/components/ui/Button';
 import { useDashboard } from '@/providers/DashboardProvider';
+import { useLoading } from '@/providers/LoadingProvider';
+import { useDeletePropertyMutation, useGetOwnPropertiesQuery, useUpdatePropertyMutation } from '@/redux/api/propertiesApi';
 import { Eye, Pencil, Plus, Search, Trash2 } from 'lucide-react';
 import Image from 'next/image';
-import { useEffect, useState, useMemo } from 'react';
-import ConfirmModal from '@/components/shared/ConfirmModal';
 import { useRouter } from 'next/navigation';
-import { useGetOwnPropertiesQuery, useDeletePropertyMutation, useUpdatePropertyMutation } from '@/redux/api/propertiesApi';
-import PropertyEditModal from '@/components/pages/dashboard/PropertyEditModal';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
-import { useLoading } from '@/providers/LoadingProvider';
 
 const columns = [
     {
@@ -24,8 +24,8 @@ const columns = [
                 <Image
                     src={
                         item?.photos?.length > 0 ?
-                        process.env.NEXT_PUBLIC_IMAGE_URL + (item?.photos?.[0]?.url || '') :
-                         '/placeholder.svg'
+                            process.env.NEXT_PUBLIC_IMAGE_URL + (item?.photos?.[0]?.url || '') :
+                            '/placeholder.svg'
                     }
                     alt={item.property_type || 'Property'}
                     width={40}
@@ -54,6 +54,20 @@ const columns = [
         minWidth: '120px',
     },
     {
+        header: 'isActive',
+        accessor: 'isActive',
+        render: (item: any) => (
+            <span
+                className={`px-2 py-1 rounded-full text-xs font-medium ${item.isActive
+                    ? 'bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-200'
+                    : 'bg-amber-300 text-amber-800 dark:bg-amber-900 dark:text-amber-200'}`}
+            >
+                {item.isActive ? 'Active' : 'Inactive'}
+            </span>
+        ),
+        minWidth: '120px',
+    },
+    {
         header: 'Post Date',
         accessor: 'created_at',
         render: (item: any) => (
@@ -75,7 +89,7 @@ export default function PropertiesPage() {
     const { setPageTitle, setPageSubtitle } = useDashboard();
     const router = useRouter();
     const { setLoading, setLoadingText } = useLoading();
-         // Edit modal state
+    // Edit modal state
     const [editOpen, setEditOpen] = useState(false);
     const [editItem, setEditItem] = useState<any | null>(null);
     // Delete modal state
