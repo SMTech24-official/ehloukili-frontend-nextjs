@@ -15,7 +15,7 @@ import { ISubscription } from '@/schema/subscription.schema';
 const columns = [
     { header: 'Subscription ID', accessor: 'id' as keyof ISubscription, minWidth: '120px' },
     { header: 'User ID', accessor: 'user' as keyof ISubscription, minWidth: '120px', render: (item: ISubscription) => `${item.user.id}` },
-    { header: 'User', accessor: 'user' as keyof ISubscription, minWidth: '120px', render: (item: ISubscription) => `${item.user.first_name} ${item.user.last_name}` },
+    { header: 'User', accessor: '' as keyof ISubscription, minWidth: '120px', render: (item: ISubscription) => `${item.user.first_name} ${item.user.last_name}` },
     { header: 'Payment Intent ID', accessor: 'payment_intent_id' as keyof ISubscription, minWidth: '160px', render: (item: ISubscription) => item.payment_intent_id || 'N/A' },
     { header: 'Payment Status', accessor: 'payment_status' as keyof ISubscription, minWidth: '120px', render: (item: ISubscription) => item.payment_status || 'N/A' },
     { header: 'Status', accessor: 'status' as keyof ISubscription, minWidth: '100px', render: (item: ISubscription) => item.status || 'N/A' },
