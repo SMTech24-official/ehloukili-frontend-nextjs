@@ -1,4 +1,5 @@
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -8,6 +9,14 @@ import Select from '@/components/ui/Select';
 import Button from '@/components/ui/Button';
 import FileDropzonePreview from '@/components/shared/FileDropzonePreview';
 import { submitPropertyFormSchema, SubmitPropertyFormSchema } from '@/schema/submitPropertyForm.schema';
+import { useCreatePropertyMutation } from '@/redux/api/propertiesApi';
+import { geocodeAddress } from '@/utils/geocode';
+import { toast } from 'sonner';
+import Spinner from '@/components/ui/Spinner';
+import { allCountry } from '../../../../public/data/countries';
+import { useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+
 const SELLER_TYPES = [
 	{ value: 'agent', label: 'Agent' },
 	{ value: 'owner', label: 'Owner' },
@@ -70,13 +79,17 @@ const defaultValues: SubmitPropertyFormSchema = {
 	features: { interior: [], exterior: [] },
 	documents: [],
 	media: [],
+	price: 0,
+	country: '',
 };
 
 export default function SubmitPropertyPage() {
+	const [createProperty, { isLoading }] = useCreatePropertyMutation();
 	const {
 		control,
 		handleSubmit,
 		setValue,
+		getValues,
 		formState: { errors, isSubmitting },
 	} = useForm<SubmitPropertyFormSchema>({
 		defaultValues,
@@ -84,17 +97,120 @@ export default function SubmitPropertyPage() {
 		mode: 'onTouched',
 	});
 
-	// Interactive: update form state on file drop
-	const handleDocFiles = (files: File[]) => {
-		setValue('documents', files);
-	};
-	const handleMediaFiles = (files: File[]) => {
-		setValue('media', files);
-	};
+	const router = useRouter();
 
-	const onSubmit = async () => {
-		await new Promise((res) => setTimeout(res, 1200));
-		alert('Property submitted!');
+	const handleDocFiles = useCallback((newFiles: File[]) => {
+		const currentDocs = getValues('documents') || [];
+		const uniqueFiles = newFiles.filter(
+			newFile => !currentDocs.some(doc => doc.name === newFile.name && doc.size === newFile.size)
+		);
+		if (uniqueFiles.length < newFiles.length) {
+			toast.warning('Duplicate files were ignored.');
+		}
+		setValue('documents', [...currentDocs, ...uniqueFiles], { shouldValidate: true });
+	}, [getValues, setValue]);
+
+	const handleMediaFiles = useCallback((newFiles: File[]) => {
+		const currentMedia = getValues('media') || [];
+		const uniqueFiles = newFiles.filter(
+			newFile => !currentMedia.some(media => media.name === newFile.name && media.size === newFile.size)
+		);
+		if (uniqueFiles.length < newFiles.length) {
+			toast.warning('Duplicate files were ignored.');
+		}
+		setValue('media', [...currentMedia, ...uniqueFiles], { shouldValidate: true });
+	}, [getValues, setValue]);
+
+	const handleRemoveDoc = useCallback((index: number) => {
+		const currentDocs = getValues('documents') || [];
+		setValue('documents', currentDocs.filter((_, i) => i !== index), { shouldValidate: true });
+	}, [getValues, setValue]);
+
+	const handleRemoveMedia = useCallback((index: number) => {
+		const currentMedia = getValues('media') || [];
+		setValue('media', currentMedia.filter((_, i) => i !== index), { shouldValidate: true });
+	}, [getValues, setValue]);
+
+	const onSubmit = async (values: SubmitPropertyFormSchema) => {
+		try {
+			const geo = await geocodeAddress(values.address, values.city, values.state, '').catch(err => {
+				console.error('Geocode error:', err);
+				return { lat: null, lng: null };
+			});
+			const lat = geo?.lat ?? null;
+			const lng = geo?.lng ?? null;
+
+			const formData = new FormData();
+			if (values.sellerType === 'agent') {
+				formData.append('agent_name', `${values.firstName} ${values.lastName}`);
+			}
+			formData.append('first_name', values.firstName);
+			formData.append('last_name', values.lastName);
+			formData.append('phone_number', values.phone);
+			formData.append('email', values.email);
+			formData.append('property_type', values.propertyType);
+			formData.append('country', values.country);
+			formData.append('street_address', values.address);
+			formData.append('city', values.city);
+			formData.append('state', values.state);
+			formData.append('zip_code', values.zip);
+			formData.append('property_status', values.propertyState);
+			formData.append('bedrooms', values.bedrooms.toString());
+			formData.append('bathrooms', values.bathrooms.toString());
+			formData.append('lot_area', values.lotSize.toString());
+			formData.append('unit_area', values.area.toString());
+			formData.append('year_built', values.yearBuilt.toString());
+			formData.append('property_description', values.description);
+			values.features.interior.forEach((feature, index) => {
+				formData.append(`interior_features[${index}]`, feature);
+			});
+			values.features.exterior.forEach((feature, index) => {
+				formData.append(`exterior_features[${index}]`, feature);
+			});
+			values.documents.forEach((file, index) => {
+				formData.append(`documents[${index}]`, file);
+			});
+			values.media.forEach((file, index) => {
+				formData.append(`photos[${index}]`, file);
+			});
+			if (lat !== null) formData.append('latitude', lat.toString());
+			if (lng !== null) formData.append('longitude', lng.toString());
+			formData.append('price', values.price.toString());
+
+			// Debug FormData contents
+			for (const [key, value] of formData.entries()) {
+				console.log(`${key}: ${value instanceof File ? value.name : value}`);
+			}
+
+			await createProperty(formData).unwrap();
+			toast.success(
+				<div className="flex items-center gap-3">
+					<span className="text-green-600">
+						<svg width="32" height="32" fill="none" viewBox="0 0 24 24">
+							<circle cx="12" cy="12" r="10" fill="#DCFCE7" />
+							<path d="M8 12.5l2.5 2.5L16 9.5" stroke="#22C55E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+						</svg>
+					</span>
+					<span className="text-base font-semibold">Property submitted successfully!</span>
+				</div>,
+				{ duration: 4000 }
+			);
+			router.push('/agent/properties');
+		} catch (err: any) {
+			toast.error(
+				<div className="flex items-center gap-3">
+					<span className="text-red-600">
+						<svg width="32" height="32" fill="none" viewBox="0 0 24 24">
+							<circle cx="12" cy="12" r="10" fill="#FEE2E2" />
+							<path d="M9 9l6 6m0-6l-6 6" stroke="#EF4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+						</svg>
+					</span>
+					{/* write the valid error message */}
+					<span className="text-base font-semibold">{err.message || 'Failed to submit property. Please try again.'}</span>
+				</div>,
+				{ duration: 4000 }
+			);
+		}
 	};
 
 	return (
@@ -104,19 +220,48 @@ export default function SubmitPropertyPage() {
 				<Text color="muted" className="text-lg !text-center">Take the first step towards stress-free hosting and maximizing your rental income.</Text>
 			</div>
 			<form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
-				{/* Contact Information */}
+				{Object.keys(errors).length > 0 && (
+					<div className="text-red-500" role="alert">
+						Please fix the following errors:
+						<ul>
+							{Object.entries(errors).map(([key, error]) => (
+								<li key={key}>{key}: {error.message}</li>
+							))}
+						</ul>
+					</div>
+				)}
 				<section className="border-b border-b-gray-100 pb-8">
 					<Heading level={5} className="text-lg font-semibold mb-4">Contact Information</Heading>
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-					<div className='col-span-2'>
-                        	<Controller
-							name="sellerType"
+						<div className="col-span-2">
+							<Controller
+								name="sellerType"
+								control={control}
+								render={({ field }) => (
+									<Select {...field} label="Seller Type" options={SELLER_TYPES} error={errors.sellerType?.message} required />
+								)}
+							/>
+						</div>
+						<Controller
+							name="country"
 							control={control}
 							render={({ field }) => (
-								<Select {...field} label="Seller Type" options={SELLER_TYPES} error={errors.sellerType?.message} required />
+								<Select
+									{...field}
+									label="Country"
+									options={allCountry?.map((c: any) => ({ value: c.name, label: c.name }))}
+									error={errors.country?.message}
+									required
+								/>
 							)}
 						/>
-                    </div>
+						<Controller
+							name="price"
+							control={control}
+							render={({ field }) => (
+								<Input {...field} type="number" label="Price" error={errors.price?.message} required min={0} />
+							)}
+						/>
 						<Controller
 							name="firstName"
 							control={control}
@@ -147,8 +292,6 @@ export default function SubmitPropertyPage() {
 						/>
 					</div>
 				</section>
-
-				{/* Property Information */}
 				<section className="border-b border-b-gray-100 pb-8">
 					<Heading level={5} className="text-lg font-semibold mb-4">Property Information</Heading>
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -196,8 +339,6 @@ export default function SubmitPropertyPage() {
 						/>
 					</div>
 				</section>
-
-				{/* Property Details */}
 				<section className="border-b border-b-gray-100 pb-8">
 					<Heading level={5} className="text-lg font-semibold mb-4">Property Details</Heading>
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -244,22 +385,20 @@ export default function SubmitPropertyPage() {
 							)}
 						/>
 					</div>
-								<Controller
-									name="description"
-									control={control}
-									render={({ field }) => (
-										<textarea
-											{...field}
-											className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent min-h-[60px]"
-											placeholder="Enter Property Description"
-											required
-											rows={2}
-										/>
-									)}
-								/>
+					<Controller
+						name="description"
+						control={control}
+						render={({ field }) => (
+							<textarea
+								{...field}
+								className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent min-h-[60px]"
+								placeholder="Enter Property Description"
+								required
+								rows={2}
+							/>
+						)}
+					/>
 				</section>
-
-				{/* Features & Amenities */}
 				<section className="border-b border-b-gray-100 pb-8">
 					<Heading level={5} className="text-lg font-semibold mb-4">Features & Amenities</Heading>
 					<div className="grid grid-cols-1 gap-8">
@@ -321,9 +460,6 @@ export default function SubmitPropertyPage() {
 						</div>
 					</div>
 				</section>
-
-
-				{/* Property Document */}
 				<section className="border-b border-b-gray-100 pb-8">
 					<Heading level={5} className="text-lg font-semibold mb-4">Property Document</Heading>
 					<Controller
@@ -332,7 +468,8 @@ export default function SubmitPropertyPage() {
 						render={({ field }) => (
 							<FileDropzonePreview
 								label="Upload property documents"
-								onFiles={files => { field.onChange(files); handleDocFiles(files); }}
+								onFiles={handleDocFiles}
+								onRemoveFile={handleRemoveDoc}
 								files={field.value}
 								multiple
 								accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
@@ -341,8 +478,6 @@ export default function SubmitPropertyPage() {
 						)}
 					/>
 				</section>
-
-				{/* Photos & Media */}
 				<section>
 					<Heading level={5} className="text-lg font-semibold mb-4">Photos & Media</Heading>
 					<Controller
@@ -351,7 +486,8 @@ export default function SubmitPropertyPage() {
 						render={({ field }) => (
 							<FileDropzonePreview
 								label="Upload property photos and media"
-								onFiles={files => { field.onChange(files); handleMediaFiles(files); }}
+								onFiles={handleMediaFiles}
+								onRemoveFile={handleRemoveMedia}
 								files={field.value}
 								multiple
 								accept="image/*,video/*"
@@ -360,9 +496,15 @@ export default function SubmitPropertyPage() {
 						)}
 					/>
 				</section>
-
-				<Button type="submit" className="w-full !text-white mt-8" disabled={isSubmitting} isLoading={isSubmitting}>
-					Submit My Property
+				<Button type="submit" className="w-full !text-white mt-8" disabled={isSubmitting || isLoading} isLoading={isSubmitting || isLoading}>
+					{(isSubmitting || isLoading) ? (
+						<>
+							<Spinner size={20} className="mr-2" />
+							Submitting...
+						</>
+					) : (
+						'Submit My Property'
+					)}
 				</Button>
 			</form>
 		</main>

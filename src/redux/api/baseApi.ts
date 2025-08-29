@@ -40,7 +40,7 @@ const baseQueryWithAuth: BaseQueryFn<
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQueryWithAuth,
-  tagTypes: ["User", "all-Users", "single-User","plan","singlePlan","subscription","agentSubscriptions"],
+  tagTypes: ["User", "all-Users", "single-User","plan","singlePlan","subscription","agentSubscriptions","properties","own-properties"],
   endpoints: (builder) => ({}),
 });
 

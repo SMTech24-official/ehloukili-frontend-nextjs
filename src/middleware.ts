@@ -6,6 +6,7 @@ import { NextResponse } from "next/server";
 
 interface DecodedToken {
   role?: string;
+  exp?: number; 
   [key: string]: any;
 }
 
@@ -31,6 +32,10 @@ export function middleware(request: NextRequest) {
   try {
     const user = jwtDecode<DecodedToken>(token as string);
     const { pathname } = request.nextUrl;
+
+    if (user.exp && Date.now() >= user.exp * 1000) {
+      return NextResponse.redirect(loginUrl);
+    }
 
     const allowedRoles = Object.entries(roleBasedAccess)
       .filter(([path]) => pathname.startsWith(path))

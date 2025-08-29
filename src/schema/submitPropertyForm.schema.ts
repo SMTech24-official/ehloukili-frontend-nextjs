@@ -37,6 +37,9 @@ export interface SubmitPropertyFormSchema extends ContactInfo, PropertyInfo, Pro
   features: FeaturesAmenities;
   documents: File[];
   media: File[];
+  price: number;
+  country: string;
+  // image: File | null;
 }
 
 export const submitPropertyFormSchema: yup.ObjectSchema<SubmitPropertyFormSchema> = yup.object({
@@ -64,4 +67,7 @@ export const submitPropertyFormSchema: yup.ObjectSchema<SubmitPropertyFormSchema
   }).required(),
   documents: yup.array().of(yup.mixed<File>().defined()).required(),
   media: yup.array().of(yup.mixed<File>().defined()).required(),
+  price: yup.number().min(0).required('Price is required'),
+  country: yup.string().required('Country is required'),
+  // image: yup.mixed<File>().nullable().required('Image is required'),
 });
