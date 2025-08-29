@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 'use client';
 
-import * as React from 'react';
-import debounce from 'lodash/debounce';
 import Input from '@/components/ui/Input';
 import { SearchIcon } from '@/components/ui/SearchIcon';
+import debounce from 'lodash/debounce';
+import * as React from 'react';
 
 interface LocationSuggestion {
   place_id: number;
@@ -20,6 +20,7 @@ interface LocationSearchInputProps {
 export const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ onLocationSelect }) => {
   const [query, setQuery] = React.useState('');
   const [suggestions, setSuggestions] = React.useState<LocationSuggestion[]>([]);
+  const [location, setLocation] = React.useState<LocationSuggestion | null>(null);
   const [isFocused, setIsFocused] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -57,7 +58,7 @@ export const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ onLoca
   const handleSelect = (location: LocationSuggestion) => {
     setQuery(location.display_name);
     setSuggestions([]);
-    onLocationSelect(location);
+    setLocation(location);
     setIsFocused(false);
   };
 
@@ -76,7 +77,7 @@ export const LocationSearchInput: React.FC<LocationSearchInputProps> = ({ onLoca
           type="button"
           className="p-2 rounded-md bg-[var(--color-primary-600)] text-white hover:bg-[var(--color-primary-700)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--color-primary-500)]"
           onClick={() => {
-            if (suggestions.length > 0) handleSelect(suggestions[0]);
+            if (location) onLocationSelect(location);
           }}
         >
           <SearchIcon className="h-5 w-5 !text-white" />
