@@ -1,0 +1,57 @@
+export type ISubscription = {
+  id: number;
+  status: string;
+  starts_at: string | null;
+  ends_at: string | null;
+  trial_ends_at: string | null;
+  name: string | null;
+  stripe_id: string | null;
+  stripe_status: string | null;
+  stripe_price: string | null;
+  quantity: number | null;
+  payment_intent_id: string | null;
+  payment_status: string | null;
+  created_at: string;
+  updated_at: string;
+  package: {
+    id: number;
+    name: string;
+    description: string;
+    price: string;
+    duration: string;
+    duration_in_days: number;
+    state: string;
+    property_limit: number;
+    bg_color: string;
+    text_color: string;
+    is_free_promo: number;
+    free_promo_text: string | null;
+    features: string[];
+    stripe_price_id: string | null;
+    is_active: number;
+
+  };
+  user: {
+    id: number;
+    first_name: string;
+    last_name: string;
+    email: string;
+    password: string;
+    role: string;
+    address: string | null;
+    city: string | null;
+    state: string | null;
+    zip_code: string | null;
+    phone: string | null;
+    country: string | null;
+    is_subscribed: number;
+    stripe_id: string | null;
+    pm_type: string | null;
+    pm_last_four: string | null;
+    image: string | null;
+    email_verified_at: string | null;
+    remember_token: string | null;
+    created_at: string;
+    updated_at: string;
+  };
+};

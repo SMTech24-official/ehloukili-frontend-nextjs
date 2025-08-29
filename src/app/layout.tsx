@@ -34,7 +34,6 @@ export default function RootLayout({
           <StripeProvider>
             {children}
           </StripeProvider>
-          {children}
         </ClientLayout>
       </body>
     </html>

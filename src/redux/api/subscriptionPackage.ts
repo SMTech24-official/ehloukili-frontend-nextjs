@@ -49,6 +49,13 @@ export const subscriptionApi = baseApi.injectEndpoints({
       }),
       providesTags: ["agentSubscriptions"],
     }),
+      getAllSubscriptions: builder.query<any, void>({
+      query: () => ({
+        url: `/subscriptions`,
+        method: "GET",
+      }),
+      providesTags: ["subscription"],
+    }),
 })
 })
 
@@ -59,4 +66,5 @@ export const {
   useGetSinglePlanQuery,
   useCreateSubscriptionMutation,
   useGetAgentSubscriptionsQuery,
+  useGetAllSubscriptionsQuery,
 } = subscriptionApi;

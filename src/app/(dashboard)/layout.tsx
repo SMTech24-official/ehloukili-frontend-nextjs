@@ -2,7 +2,7 @@
 import LogoutModal from "@/components/shared/LogoutModal";
 import { useLogoutModal } from "@/hooks/useLogout";
 import { DashboardProvider, useDashboard } from "@/providers/DashboardProvider";
-import { Building2, Home, LogOut, Menu, Tag, Users, X } from "lucide-react";
+import { Building2, DollarSignIcon, Home, LogOut, Menu, Tag, Users, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -31,6 +31,7 @@ const adminNavItems = [
         href: "/admin/properties",
     },
     { label: "Pricing Plan", icon: <Tag size={20} />, href: "/admin/pricing" },
+    { label: "Subscriptions", icon: <DollarSignIcon size={20} />, href: "/admin/subscriptions" },
 ];
 
 function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {

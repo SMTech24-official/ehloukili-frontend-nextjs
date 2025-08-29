@@ -14,7 +14,7 @@ import { useGetAgentSubscriptionsQuery } from '@/redux/api/subscriptionPackage';
 
 
 // API data types
-type Subscription = {
+export type Subscription = {
     id: number;
     payment_intent_id: string | null;
     payment_status: string | null;
