@@ -10,7 +10,7 @@ export const subscriptionApi = baseApi.injectEndpoints({
         method: "POST",
         body: data      ,
       }),
-      invalidatesTags: ["plan","singlePlan"],
+      invalidatesTags: ["plan","singlePlan","agentSubscriptions"],
     }),
     updatePlan: builder.mutation({
       query: (data: { id: string; data: any }) => ({
@@ -18,7 +18,7 @@ export const subscriptionApi = baseApi.injectEndpoints({
         method: "PUT",
         body: data?.data,
       }),
-      invalidatesTags: ["plan","singlePlan"],
+      invalidatesTags: ["plan","singlePlan","agentSubscriptions"],
     }),
     getPlans: builder.query<any, void>({
       query: () => ({
@@ -40,7 +40,7 @@ export const subscriptionApi = baseApi.injectEndpoints({
         method: "POST",
         body: data      ,
       }),
-      invalidatesTags: ["subscription"],
+      invalidatesTags: ["subscription","agentSubscriptions"],
     }),
       getAgentSubscriptions: builder.query<any, void>({
       query: () => ({

@@ -35,7 +35,7 @@ export default function PaymentPage() {
   const { data: user } = useGetMeQuery();
 
   const router = useRouter();
-  
+
   const stripe = useStripe();
   const elements = useElements();
 
@@ -74,12 +74,12 @@ export default function PaymentPage() {
   }, [errors]);
 
   const onSubmit = async (data: PaymentFormSchema) => {
-    
-	if(!user){
-		toast.error("User not found. Please log in.");
-		router.push("/auth/login");
-		return;
-	}
+
+    if (!user) {
+      toast.error("User not found. Please log in.");
+      router.push("/auth/login");
+      return;
+    }
 
     if (!stripe || !elements) {
       toast.error("Stripe is not loaded. Please try refreshing the page.");
@@ -93,29 +93,44 @@ export default function PaymentPage() {
         return;
       }
 
-      const { error, token } = await stripe.createToken(cardElement, {
-        name: `${data.firstName} ${data.lastName}`,
-        address_line1: data.address,
-        address_city: data.city,
-        address_state: data.state,
-        address_zip: data.zip,
-        address_country: data.country,
+      // const { error, token } = await stripe.createToken(cardElement, {
+      //   name: `${data.firstName} ${data.lastName}`,
+      //   address_line1: data.address,
+      //   address_city: data.city,
+      //   address_state: data.state,
+      //   address_zip: data.zip,
+      //   address_country: data.country,
+      // });
+
+      const { error, paymentMethod } = await stripe.createPaymentMethod({
+        type: "card",
+        card: cardElement,
+        billing_details: {
+          name: `${data.firstName} ${data.lastName}`,
+          address: {
+            line1: data.address,
+            city: data.city,
+            state: data.state,
+            postal_code: data.zip,
+            country: data.country,
+          },
+        },
       });
 
 
-      if (error || !token) {
-        console.error("Stripe token error:", error);
+      if (error || !paymentMethod) {
+        console.error("Stripe payment method error:", error);
         toast.error(error?.message || "Failed to create payment method.");
         return;
       }
 
       const response = await createSubscription({
         package_id: Number(planId),
-        payment_method: token.id,
+        payment_method: paymentMethod.id,
       }).unwrap();
 
       toast.success("Subscription successful!");
-	  router.push("/agent/pricing");
+      router.push("/agent/pricing");
     } catch (err: any) {
       toast.error(err?.data?.message || "Payment failed. Please try again.");
     }
@@ -307,12 +322,12 @@ export default function PaymentPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   required
                 >
-				  <option value="">Select a country</option>
-				  {allCountry.map((country) => (
-					<option key={country?.name} value={country?.name}>
-					  {country?.name}
-					</option>
-				  ))}
+                  <option value="">Select a country</option>
+                  {allCountry.map((country) => (
+                    <option key={country?.name} value={country?.code2}>
+                      {country?.name}
+                    </option>
+                  ))}
                 </select>
               )}
             />
