@@ -1,13 +1,15 @@
 'use client';
 
-import * as React from 'react';
+import LocationSelector from '@/components/shared/LocationSelector';
 import Button from '@/components/ui/Button';
 import Select from '@/components/ui/Select';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import * as React from 'react';
 
 export interface SearchFilters {
-    location: string;
+    city: string;
+    country: string;
     priceRange: string;
     propertyType: string;
     rooms: string;
@@ -61,7 +63,7 @@ const SaleSearchSection: React.FC<SaleSearchSectionProps> = ({
                 <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-7 gap-4 items-end">
                         {/* Location */}
-                        <div>
+                        {/* <div>
                             <label className="block text-sm font-medium text-[var(--color-neutral-700)] mb-2">
                                 Location
                             </label>
@@ -81,8 +83,18 @@ const SaleSearchSection: React.FC<SaleSearchSectionProps> = ({
                                 placeholder="Any Location"
                                 className="w-full"
                             />
-                        </div>
+                        </div> */}
 
+                        <LocationSelector
+                            type="country" // or "state"
+                            value={filters.country}
+                            onChange={(value) => onFiltersChange({ ...filters, country: value })}
+                        />
+                        <LocationSelector
+                            type="state" // or "state"
+                            value={filters.city}
+                            onChange={(value) => onFiltersChange({ ...filters, city: value })}
+                        />
                         {/* Price */}
                         <div>
                             <label className="block text-sm font-medium text-[var(--color-neutral-700)] mb-2">
@@ -143,14 +155,14 @@ const SaleSearchSection: React.FC<SaleSearchSectionProps> = ({
                                 value={filters.rooms}
                                 onChange={(value: string) => onFiltersChange({ ...filters, rooms: value })}
                                 options={[
-                                    { value: 'any-rooms', label: '3' },
+                                    { value: 'any-rooms', label: 'Any' },
                                     { value: '1', label: '1' },
                                     { value: '2', label: '2' },
                                     { value: '3', label: '3' },
                                     { value: '4', label: '4' },
                                     { value: '5+', label: '5+' },
                                 ]}
-                                placeholder="3"
+                                placeholder="1"
                                 className="w-full"
                             />
                         </div>
@@ -195,7 +207,7 @@ const SaleSearchSection: React.FC<SaleSearchSectionProps> = ({
                                 Search
                             </Button>
                         </div>
-                        <div onClick={()=>router.push('/map-view')} className="text-[var(--color-secondary-600)] px-2 py-3 flex items-center gap-2 cursor-pointer">
+                        <div onClick={() => router.push('/map-view')} className="text-[var(--color-secondary-600)] px-2 py-3 flex items-center gap-2 cursor-pointer col-span-full justify-center">
                             <Image
                                 src="/homePage/iconMapInhero.svg"
                                 alt="Search"

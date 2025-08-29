@@ -1,15 +1,25 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
-import React from 'react';
+import SalePropertiesGrid from '@/components/pages/sale/SalePropertiesGrid';
 import type { SearchFilters } from '@/components/pages/sale/SaleSearchSection';
 import SaleSearchSection from '@/components/pages/sale/SaleSearchSection';
-import SalePropertiesGrid from '@/components/pages/sale/SalePropertiesGrid';
+import React from 'react';
 
 const PropertyPage = () => {
     const [activeTab, setActiveTab] = React.useState<'sale' | 'rent'>('sale');
     const [searchTrigger, setSearchTrigger] = React.useState(0);
     const [filters, setFilters] = React.useState<SearchFilters>({
-        location: 'any-location',
+        country: '',
+        city: '',
+        priceRange: 'any-price',
+        propertyType: 'any-type',
+        rooms: 'any-rooms',
+        status: 'any-status',
+    });
+    const [filtersPreview, setFiltersPreview] = React.useState<SearchFilters>({
+        city: '',
+        country: '',
         priceRange: 'any-price',
         propertyType: 'any-type',
         rooms: 'any-rooms',
@@ -20,7 +30,8 @@ const PropertyPage = () => {
         setActiveTab(tab);
         // Reset filters when changing tabs
         setFilters({
-            location: 'any-location',
+            city: '',
+            country: '',
             priceRange: 'any-price',
             propertyType: 'any-type',
             rooms: 'any-rooms',
@@ -29,27 +40,41 @@ const PropertyPage = () => {
     };
 
     const handleFiltersChange = (newFilters: SearchFilters) => {
-        setFilters(newFilters);
+        setFiltersPreview(newFilters);
     };
 
     const handleSearch = () => {
-        // Trigger search by incrementing searchTrigger
-        setSearchTrigger(prev => prev + 1);
+        setFilters({
+            city: filtersPreview.city,
+            country: filtersPreview.country,
+            priceRange: filtersPreview.priceRange,
+            propertyType: filtersPreview.propertyType,
+            rooms: filtersPreview.rooms,
+            status: filtersPreview.status,
+        });
+        setFiltersPreview({
+            city: '',
+            country: '',
+            priceRange: 'any-price',
+            propertyType: 'any-type',
+            rooms: 'any-rooms',
+            status: 'any-status',
+        });
     };
 
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Search Section */}
-            <SaleSearchSection 
+            <SaleSearchSection
                 activeTab={activeTab}
                 onTabChange={handleTabChange}
-                filters={filters}
+                filters={filtersPreview}
                 onFiltersChange={handleFiltersChange}
                 onSearch={handleSearch}
             />
-            
+
             {/* Properties Grid */}
-            <SalePropertiesGrid 
+            <SalePropertiesGrid
                 activeTab={activeTab}
                 filters={filters}
                 searchTrigger={searchTrigger}
