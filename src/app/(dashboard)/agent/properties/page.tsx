@@ -22,7 +22,11 @@ const columns = [
         render: (item: any) => (
             <div className="flex items-center gap-3">
                 <Image
-                    src={item?.photos?.[0]?.url || '/images/placeholder.png'}
+                    src={
+                        item?.photos?.length > 0 ?
+                        process.env.NEXT_PUBLIC_IMAGE_URL + (item?.photos?.[0]?.url || '') :
+                         '/placeholder.svg'
+                    }
                     alt={item.property_type || 'Property'}
                     width={40}
                     height={40}
@@ -190,35 +194,6 @@ export default function PropertiesPage() {
         setEditOpen(false);
         setEditItem(null);
     };
-    // Edit submit handler (fields/validation like SubmitPropertyPage)
-    const handleEditSubmit = async (values: any) => {
-        setLoading(true);
-        try {
-            const formData = new FormData();
-            // Only send changed fields, but for demo send all (production: diff logic)
-            Object.entries(values).forEach(([key, value]) => {
-                if (value !== undefined && value !== null) {
-                    if (Array.isArray(value)) {
-                        value.forEach((v, i) => formData.append(`${key}[${i}]`, v));
-                    } else {
-                        formData.append(
-                            key,
-                            typeof value === 'object' && value !== null && !(value instanceof Blob) && !(value instanceof File)
-                                ? JSON.stringify(value)
-                                : String(value)
-                        );
-                    }
-                }
-            });
-            await updateProperty({ id: editItem.id, data: formData }).unwrap();
-            toast.success('Property updated successfully.');
-            setEditOpen(false);
-            setEditItem(null);
-        } catch (err: any) {
-            toast.error(err?.data?.message || 'Failed to update property.');
-        }
-        setLoading(false);
-    };
 
     // Actions for table
     const renderActions = (item: any) => (
@@ -290,7 +265,10 @@ export default function PropertiesPage() {
                     open={editOpen}
                     onClose={handleEditClose}
                     property={editItem}
-                    onSubmit={handleEditSubmit}
+                    updateProperty={updateProperty}
+                    setLoading={setLoading}
+                    setEditOpen={setEditOpen}
+                    setEditItem={setEditItem}
                     loading={isUpdating}
                 />
             )}

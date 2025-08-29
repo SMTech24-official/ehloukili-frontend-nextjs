@@ -55,11 +55,16 @@ interface PropertyEditModalProps {
   open: boolean;
   onClose: () => void;
   property: any;
-  onSubmit: (values: any) => void;
+  updateProperty: any;
+  setLoading: (loading: boolean) => void;
+  setEditOpen: (open: boolean) => void;
+  setEditItem: (item: any) => void;
   loading?: boolean;
 }
 
-export default function PropertyEditModal({ open, onClose, property, onSubmit, loading }: PropertyEditModalProps) {
+import { toast } from 'sonner';
+
+export default function PropertyEditModal({ open, onClose, property, updateProperty, setLoading, setEditOpen, setEditItem, loading }: PropertyEditModalProps) {
   const {
     control,
     handleSubmit,
@@ -128,6 +133,95 @@ export default function PropertyEditModal({ open, onClose, property, onSubmit, l
   const handleRemoveMedia = (index: number) => {
     const currentMedia = getValues('media') || [];
     setValue('media', currentMedia.filter((_, i) => i !== index), { shouldValidate: true });
+  };
+
+  // Edit submit handler (like SubmitPropertyPage)
+  const onSubmit = async (values: SubmitPropertyFormSchema) => {
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      // Only send changed fields
+      const original = normalizeProperty(property);
+
+      // Helper to check if value changed
+      const isChanged = (key: keyof SubmitPropertyFormSchema) => {
+        if (key === 'documents' || key === 'media') return true; // always check files
+        return JSON.stringify(values[key]) !== JSON.stringify(original[key]);
+      };
+
+      // Simple fields
+      if (isChanged('sellerType')) formData.append('seller_type', values.sellerType);
+      if (isChanged('firstName')) formData.append('first_name', values.firstName);
+      if (isChanged('lastName')) formData.append('last_name', values.lastName);
+      if (isChanged('phone')) formData.append('phone_number', values.phone);
+      if (isChanged('email')) formData.append('email', values.email);
+      if (isChanged('propertyType')) formData.append('property_type', values.propertyType);
+      if (isChanged('country')) formData.append('country', values.country);
+      if (isChanged('address')) formData.append('street_address', values.address);
+      if (isChanged('city')) formData.append('city', values.city);
+      if (isChanged('state')) formData.append('state', values.state);
+      if (isChanged('zip')) formData.append('zip_code', values.zip);
+      if (isChanged('propertyState')) formData.append('property_status', values.propertyState);
+      if (isChanged('bedrooms')) formData.append('bedrooms', values.bedrooms.toString());
+      if (isChanged('bathrooms')) formData.append('bathrooms', values.bathrooms.toString());
+      if (isChanged('lotSize')) formData.append('lot_area', values.lotSize.toString());
+      if (isChanged('area')) formData.append('unit_area', values.area.toString());
+      if (isChanged('yearBuilt')) formData.append('year_built', values.yearBuilt.toString());
+      if (isChanged('description')) formData.append('property_description', values.description);
+      if (isChanged('price')) formData.append('price', values.price.toString());
+
+      // Features (arrays)
+      // If user changed features, send new; else, keep original (so backend keeps old)
+      if (isChanged('features')) {
+        values.features.interior.forEach((feature, index) => {
+          formData.append(`interior_features[${index}]`, feature);
+        });
+        values.features.exterior.forEach((feature, index) => {
+          formData.append(`exterior_features[${index}]`, feature);
+        });
+      } else {
+        // If not changed, keep previous features
+        (original.features.interior || []).forEach((feature: string, index: number) => {
+          formData.append(`interior_features[${index}]`, feature);
+        });
+        (original.features.exterior || []).forEach((feature: string, index: number) => {
+          formData.append(`exterior_features[${index}]`, feature);
+        });
+      }
+
+      // Documents: send only new files as File, keep existing as is
+      const origDocs = (property.documents || []).map((d: any) => d.name);
+      const newDocs = (values.documents || []).filter((f: any) => f instanceof File);
+      newDocs.forEach((file: File, idx: number) => {
+        formData.append(`documents[${idx}]`, file);
+      });
+      // Keep existing docs (by name)
+      origDocs.forEach((name: string, idx: number) => {
+        if ((values.documents || []).some((f: any) => f.name === name && !(f instanceof File))) {
+          formData.append(`existing_documents[${idx}]`, name);
+        }
+      });
+
+      // Photos: send only new files as File, keep existing as is
+      const origPhotos = (property.photos || []).map((p: any) => p.name);
+      const newPhotos = (values.media || []).filter((f: any) => f instanceof File);
+      newPhotos.forEach((file: File, idx: number) => {
+        formData.append(`photos[${idx}]`, file);
+      });
+      origPhotos.forEach((name: string, idx: number) => {
+        if ((values.media || []).some((f: any) => f.name === name && !(f instanceof File))) {
+          formData.append(`existing_photos[${idx}]`, name);
+        }
+      });
+
+      await updateProperty({ id: property.id, data: formData }).unwrap();
+      toast.success('Property updated successfully.');
+      setEditOpen(false);
+      setEditItem(null);
+    } catch (err: any) {
+      toast.error(err?.data?.message || 'Failed to update property.');
+    }
+    setLoading(false);
   };
 
   if (!open) return null;
