@@ -28,6 +28,14 @@ export const propertiesApi = baseApi.injectEndpoints({
       }),
       providesTags: ["own-properties"],
     }),
+    // getSingle Property
+    getSingleProperty: builder.query<any, string>({
+      query: (id) => ({
+        url: `/properties/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["properties"],
+    }),
     // deleteProperty
     deleteProperty: builder.mutation({
       query: (id) => ({
@@ -44,5 +52,6 @@ export const {
     useCreatePropertyMutation,
     useUpdatePropertyMutation,
     useGetOwnPropertiesQuery,
+    useGetSinglePropertyQuery,
     useDeletePropertyMutation
 } = propertiesApi;
