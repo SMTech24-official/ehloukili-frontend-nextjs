@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { submitPropertyFormSchema, SubmitPropertyFormSchema } from '@/schema/submitPropertyForm.schema';
+import FileDropzonePreview from '@/components/shared/FileDropzonePreview';
+import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Select from '@/components/ui/Select';
-import Button from '@/components/ui/Button';
-import FileDropzonePreview from '@/components/shared/FileDropzonePreview';
+import { submitPropertyFormSchema, SubmitPropertyFormSchema } from '@/schema/submitPropertyForm.schema';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 // No Dialog component found, use a simple custom modal
 import Spinner from '@/components/ui/Spinner';
 import { allCountry } from '../../../../public/data/countries';
@@ -156,6 +156,7 @@ export default function PropertyEditModal({ open, onClose, property, updatePrope
       if (isChanged('phone')) formData.append('phone_number', values.phone);
       if (isChanged('email')) formData.append('email', values.email);
       if (isChanged('propertyType')) formData.append('property_type', values.propertyType);
+      if (isChanged('listingType')) formData.append('listing_type', values.listingType);
       if (isChanged('country')) formData.append('country', values.country);
       if (isChanged('address')) formData.append('street_address', values.address);
       if (isChanged('city')) formData.append('city', values.city);
@@ -237,259 +238,259 @@ export default function PropertyEditModal({ open, onClose, property, updatePrope
         </button>
         <h2 className="text-xl font-bold mb-4">Edit Property</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Controller
-            name="sellerType"
-            control={control}
-            render={({ field }) => (
-              <Select {...field} label="Seller Type" options={SELLER_TYPES} error={errors.sellerType?.message} required />
-            )}
-          />
-          <Controller
-            name="country"
-            control={control}
-            render={({ field }) => (
-              <Select {...field} label="Country" options={allCountry?.map((c: any) => ({ value: c.name, label: c.name }))} error={errors.country?.message} required />
-            )}
-          />
-          <Controller
-            name="price"
-            control={control}
-            render={({ field }) => (
-              <Input {...field} type="number" label="Price" error={errors.price?.message} required min={0} />
-            )}
-          />
-          <Controller
-            name="firstName"
-            control={control}
-            render={({ field }) => (
-              <Input {...field} label="First Name" error={errors.firstName?.message} required />
-            )}
-          />
-          <Controller
-            name="lastName"
-            control={control}
-            render={({ field }) => (
-              <Input {...field} label="Last Name" error={errors.lastName?.message} required />
-            )}
-          />
-          <Controller
-            name="phone"
-            control={control}
-            render={({ field }) => (
-              <Input {...field} label="Phone Number" error={errors.phone?.message} required />
-            )}
-          />
-          <Controller
-            name="email"
-            control={control}
-            render={({ field }) => (
-              <Input {...field} label="Email" error={errors.email?.message} required />
-            )}
-          />
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Controller
-            name="listingType"
-            control={control}
-            render={({ field }) => (
-              <Select {...field} label="Listing Type" options={LISTING_TYPES} error={errors.listingType?.message} required />
-            )}
-          />
-          <Controller
-            name="propertyType"
-            control={control}
-            render={({ field }) => (
-              <Select {...field} label="Property Type" options={PROPERTY_TYPES} error={errors.propertyType?.message} required />
-            )}
-          />
-          <Controller
-            name="address"
-            control={control}
-            render={({ field }) => (
-              <Input {...field} label="Street Address" error={errors.address?.message} required />
-            )}
-          />
-          <Controller
-            name="city"
-            control={control}
-            render={({ field }) => (
-              <Input {...field} label="City" error={errors.city?.message} required />
-            )}
-          />
-          <Controller
-            name="state"
-            control={control}
-            render={({ field }) => (
-              <Input {...field} label="State" error={errors.state?.message} required />
-            )}
-          />
-          <Controller
-            name="zip"
-            control={control}
-            render={({ field }) => (
-              <Input {...field} label="Zip Code" error={errors.zip?.message} required />
-            )}
-          />
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Controller
-            name="bedrooms"
-            control={control}
-            render={({ field }) => (
-              <Input {...field} type="number" label="Bedrooms" error={errors.bedrooms?.message} required min={0} />
-            )}
-          />
-          <Controller
-            name="bathrooms"
-            control={control}
-            render={({ field }) => (
-              <Input {...field} type="number" label="Bathrooms" error={errors.bathrooms?.message} required min={0} />
-            )}
-          />
-          <Controller
-            name="area"
-            control={control}
-            render={({ field }) => (
-              <Input {...field} type="number" label="Unit Area (m²)" error={errors.area?.message} required min={0} />
-            )}
-          />
-          <Controller
-            name="lotSize"
-            control={control}
-            render={({ field }) => (
-              <Input {...field} type="number" label="Lot Area (m²)" error={errors.lotSize?.message} required min={0} />
-            )}
-          />
-          <Controller
-            name="propertyState"
-            control={control}
-            render={({ field }) => (
-              <Select {...field} label="State" options={PROPERTY_STATES} error={errors.propertyState?.message} required />
-            )}
-          />
-          <Controller
-            name="yearBuilt"
-            control={control}
-            render={({ field }) => (
-              <Input {...field} type="number" label="Year Built" error={errors.yearBuilt?.message} required min={1800} max={new Date().getFullYear()} />
-            )}
-          />
-        </div>
-        <Controller
-          name="description"
-          control={control}
-          render={({ field }) => (
-            <textarea
-              {...field}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent min-h-[60px]"
-              placeholder="Enter Property Description"
-              required
-              rows={2}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Controller
+              name="sellerType"
+              control={control}
+              render={({ field }) => (
+                <Select {...field} label="Seller Type" options={SELLER_TYPES} error={errors.sellerType?.message} required />
+              )}
             />
-          )}
-        />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <div className="font-medium mb-2">Interior Amenities</div>
-            <div className="grid grid-cols-2 gap-2">
-              {INTERIOR_AMENITIES.map((item) => (
-                <Controller
-                  key={item}
-                  name="features.interior"
-                  control={control}
-                  render={({ field }) => (
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={field.value?.includes(item) || false}
-                        onChange={e => {
-                          const checked = e.target.checked;
-                          const newValue = checked
-                            ? [...(field.value || []), item]
-                            : (field.value || []).filter((v: string) => v !== item);
-                          field.onChange(newValue);
-                        }}
-                      />
-                      <span>{item}</span>
-                    </label>
-                  )}
-                />
-              ))}
-            </div>
+            <Controller
+              name="country"
+              control={control}
+              render={({ field }) => (
+                <Select {...field} label="Country" options={allCountry?.map((c: any) => ({ value: c.name, label: c.name }))} error={errors.country?.message} required />
+              )}
+            />
+            <Controller
+              name="price"
+              control={control}
+              render={({ field }) => (
+                <Input {...field} type="number" label="Price" error={errors.price?.message} required min={0} />
+              )}
+            />
+            <Controller
+              name="firstName"
+              control={control}
+              render={({ field }) => (
+                <Input {...field} label="First Name" error={errors.firstName?.message} required />
+              )}
+            />
+            <Controller
+              name="lastName"
+              control={control}
+              render={({ field }) => (
+                <Input {...field} label="Last Name" error={errors.lastName?.message} required />
+              )}
+            />
+            <Controller
+              name="phone"
+              control={control}
+              render={({ field }) => (
+                <Input {...field} label="Phone Number" error={errors.phone?.message} required />
+              )}
+            />
+            <Controller
+              name="email"
+              control={control}
+              render={({ field }) => (
+                <Input {...field} label="Email" error={errors.email?.message} required />
+              )}
+            />
           </div>
-          <div>
-            <div className="font-medium mb-2">Exterior Features</div>
-            <div className="grid grid-cols-2 gap-2">
-              {EXTERIOR_FEATURES.map((item) => (
-                <Controller
-                  key={item}
-                  name="features.exterior"
-                  control={control}
-                  render={({ field }) => (
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={field.value?.includes(item) || false}
-                        onChange={e => {
-                          const checked = e.target.checked;
-                          const newValue = checked
-                            ? [...(field.value || []), item]
-                            : (field.value || []).filter((v: string) => v !== item);
-                          field.onChange(newValue);
-                        }}
-                      />
-                      <span>{item}</span>
-                    </label>
-                  )}
-                />
-              ))}
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Controller
+              name="listingType"
+              control={control}
+              render={({ field }) => (
+                <Select {...field} label="Listing Type" options={LISTING_TYPES} error={errors.listingType?.message} required />
+              )}
+            />
+            <Controller
+              name="propertyType"
+              control={control}
+              render={({ field }) => (
+                <Select {...field} label="Property Type" options={PROPERTY_TYPES} error={errors.propertyType?.message} required />
+              )}
+            />
+            <Controller
+              name="address"
+              control={control}
+              render={({ field }) => (
+                <Input {...field} label="Street Address" error={errors.address?.message} required />
+              )}
+            />
+            <Controller
+              name="city"
+              control={control}
+              render={({ field }) => (
+                <Input {...field} label="City" error={errors.city?.message} required />
+              )}
+            />
+            <Controller
+              name="state"
+              control={control}
+              render={({ field }) => (
+                <Input {...field} label="State" error={errors.state?.message} required />
+              )}
+            />
+            <Controller
+              name="zip"
+              control={control}
+              render={({ field }) => (
+                <Input {...field} label="Zip Code" error={errors.zip?.message} required />
+              )}
+            />
           </div>
-        </div>
-        <div>
-          <div className="font-medium mb-2">Property Documents</div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Controller
+              name="bedrooms"
+              control={control}
+              render={({ field }) => (
+                <Input {...field} type="number" label="Bedrooms" error={errors.bedrooms?.message} required min={0} />
+              )}
+            />
+            <Controller
+              name="bathrooms"
+              control={control}
+              render={({ field }) => (
+                <Input {...field} type="number" label="Bathrooms" error={errors.bathrooms?.message} required min={0} />
+              )}
+            />
+            <Controller
+              name="area"
+              control={control}
+              render={({ field }) => (
+                <Input {...field} type="number" label="Unit Area (m²)" error={errors.area?.message} required min={0} />
+              )}
+            />
+            <Controller
+              name="lotSize"
+              control={control}
+              render={({ field }) => (
+                <Input {...field} type="number" label="Lot Area (m²)" error={errors.lotSize?.message} required min={0} />
+              )}
+            />
+            <Controller
+              name="propertyState"
+              control={control}
+              render={({ field }) => (
+                <Select {...field} label="State" options={PROPERTY_STATES} error={errors.propertyState?.message} required />
+              )}
+            />
+            <Controller
+              name="yearBuilt"
+              control={control}
+              render={({ field }) => (
+                <Input {...field} type="number" label="Year Built" error={errors.yearBuilt?.message} required min={1800} max={new Date().getFullYear()} />
+              )}
+            />
+          </div>
           <Controller
-            name="documents"
+            name="description"
             control={control}
             render={({ field }) => (
-              <FileDropzonePreview
-                label="Upload property documents"
-                onFiles={handleDocFiles}
-                onRemoveFile={handleRemoveDoc}
-                files={field.value}
-                multiple
-                accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                fileLabelPrefix="Property Document"
+              <textarea
+                {...field}
+                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent min-h-[60px]"
+                placeholder="Enter Property Description"
+                required
+                rows={2}
               />
             )}
           />
-        </div>
-        <div>
-          <div className="font-medium mb-2">Photos & Media</div>
-          <Controller
-            name="media"
-            control={control}
-            render={({ field }) => (
-              <FileDropzonePreview
-                label="Upload property photos and media"
-                onFiles={handleMediaFiles}
-                onRemoveFile={handleRemoveMedia}
-                files={field.value}
-                multiple
-                accept="image/*,video/*"
-                fileLabelPrefix="Property Photo"
-              />
-            )}
-          />
-        </div>
-        <div className="flex justify-end gap-2 mt-6">
-          <Button type="button" color="ghost" onClick={onClose} disabled={loading || isSubmitting}>Cancel</Button>
-          <Button type="submit" className="!text-white" isLoading={loading || isSubmitting} disabled={loading || isSubmitting}>
-            {loading || isSubmitting ? <Spinner size={18} className="mr-2" /> : null}
-            Save Changes
-          </Button>
-        </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <div className="font-medium mb-2">Interior Amenities</div>
+              <div className="grid grid-cols-2 gap-2">
+                {INTERIOR_AMENITIES.map((item) => (
+                  <Controller
+                    key={item}
+                    name="features.interior"
+                    control={control}
+                    render={({ field }) => (
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={field.value?.includes(item) || false}
+                          onChange={e => {
+                            const checked = e.target.checked;
+                            const newValue = checked
+                              ? [...(field.value || []), item]
+                              : (field.value || []).filter((v: string) => v !== item);
+                            field.onChange(newValue);
+                          }}
+                        />
+                        <span>{item}</span>
+                      </label>
+                    )}
+                  />
+                ))}
+              </div>
+            </div>
+            <div>
+              <div className="font-medium mb-2">Exterior Features</div>
+              <div className="grid grid-cols-2 gap-2">
+                {EXTERIOR_FEATURES.map((item) => (
+                  <Controller
+                    key={item}
+                    name="features.exterior"
+                    control={control}
+                    render={({ field }) => (
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={field.value?.includes(item) || false}
+                          onChange={e => {
+                            const checked = e.target.checked;
+                            const newValue = checked
+                              ? [...(field.value || []), item]
+                              : (field.value || []).filter((v: string) => v !== item);
+                            field.onChange(newValue);
+                          }}
+                        />
+                        <span>{item}</span>
+                      </label>
+                    )}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+          <div>
+            <div className="font-medium mb-2">Property Documents</div>
+            <Controller
+              name="documents"
+              control={control}
+              render={({ field }) => (
+                <FileDropzonePreview
+                  label="Upload property documents"
+                  onFiles={handleDocFiles}
+                  onRemoveFile={handleRemoveDoc}
+                  files={field.value}
+                  multiple
+                  accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  fileLabelPrefix="Property Document"
+                />
+              )}
+            />
+          </div>
+          <div>
+            <div className="font-medium mb-2">Photos & Media</div>
+            <Controller
+              name="media"
+              control={control}
+              render={({ field }) => (
+                <FileDropzonePreview
+                  label="Upload property photos and media"
+                  onFiles={handleMediaFiles}
+                  onRemoveFile={handleRemoveMedia}
+                  files={field.value}
+                  multiple
+                  accept="image/*,video/*"
+                  fileLabelPrefix="Property Photo"
+                />
+              )}
+            />
+          </div>
+          <div className="flex justify-end gap-2 mt-6">
+            <Button type="button" color="ghost" onClick={onClose} disabled={loading || isSubmitting}>Cancel</Button>
+            <Button type="submit" className="!text-white" isLoading={loading || isSubmitting} disabled={loading || isSubmitting}>
+              {loading || isSubmitting ? <Spinner size={18} className="mr-2" /> : null}
+              Save Changes
+            </Button>
+          </div>
         </form>
       </div>
     </div>

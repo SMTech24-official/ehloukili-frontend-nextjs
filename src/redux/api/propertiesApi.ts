@@ -9,6 +9,7 @@ interface PropertyFilters {
   property_type?: string;
   property_status?: string;
   isHomePageView?: boolean;
+  listing_type?: 'rent' | 'sale';
   isActive?: boolean;
   min_price?: number;
   max_price?: number;

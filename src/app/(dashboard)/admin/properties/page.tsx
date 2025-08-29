@@ -38,6 +38,7 @@ export default function AdminPropertiesPage() {
     const [filters, setFilters] = useState<{
         property_type?: string;
         property_status?: string;
+        listing_type?: 'rent' | 'sale';
         isHomePageView?: boolean;
         isActive?: boolean;
     }>({});
@@ -146,7 +147,6 @@ export default function AdminPropertiesPage() {
             ),
             minWidth: '300px',
         },
-        // Property Status used, new
 
         {
             header: 'Property Status',
@@ -164,6 +164,24 @@ export default function AdminPropertiesPage() {
             ),
             minWidth: '120px',
         },
+        // listing_type => sale / rent
+        {
+            header: 'Listing Type',
+            accessor: 'listing_type',
+            render: (item: any) => (
+                <span
+                    className={`px-2 py-1 rounded-full text-xs font-medium ${item.listing_type === 'rent'
+                        ? 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
+                        : item.listing_type === 'sale'
+                            ? 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200'
+                            : 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200'}`}
+                >
+                    {item.listing_type?.charAt(0).toUpperCase() + item.listing_type?.slice(1)}
+                </span>
+            ),
+            minWidth: '120px',
+        },
+
         {
             header: 'Status',
             accessor: 'status',
@@ -331,6 +349,15 @@ export default function AdminPropertiesPage() {
                         <option value="">All Statuses</option>
                         <option value="new">New</option>
                         <option value="used">Used</option>
+                    </select>
+                    <select
+                        value={filters.listing_type || ''}
+                        onChange={(e) => handleFilterChange('listing_type', e.target.value)}
+                        className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-[var(--color-neutral-800)] focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-shadow"
+                    >
+                        <option value="">Listing Type</option>
+                        <option value="rent">Rent</option>
+                        <option value="sale">Sale</option>
                     </select>
                     <div className="flex items-center gap-2">
                         <label className="text-sm text-gray-600 dark:text-gray-300">Home Page View</label>

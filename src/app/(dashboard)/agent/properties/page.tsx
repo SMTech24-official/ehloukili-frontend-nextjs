@@ -40,6 +40,22 @@ const columns = [
         minWidth: '300px',
     },
     {
+        header: 'Listing Type',
+        accessor: 'listing_type',
+        render: (item: any) => (
+            <span
+                className={`px-2 py-1 rounded-full text-xs font-medium ${item.listing_type === 'rent'
+                    ? 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
+                    : item.listing_type === 'sale'
+                        ? 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200'
+                        : 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200'}`}
+            >
+                {item.listing_type?.charAt(0).toUpperCase() + item.listing_type?.slice(1)}
+            </span>
+        ),
+        minWidth: '120px',
+    },
+    {
         header: 'Status',
         accessor: 'status',
         render: (item: any) => (

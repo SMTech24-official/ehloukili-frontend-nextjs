@@ -1,21 +1,21 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
-import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Heading, Text } from '@/components/ui/Typography';
+import FileDropzonePreview from '@/components/shared/FileDropzonePreview';
+import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Select from '@/components/ui/Select';
-import Button from '@/components/ui/Button';
-import FileDropzonePreview from '@/components/shared/FileDropzonePreview';
-import { submitPropertyFormSchema, SubmitPropertyFormSchema } from '@/schema/submitPropertyForm.schema';
-import { useCreatePropertyMutation } from '@/redux/api/propertiesApi';
-import { geocodeAddress } from '@/utils/geocode';
-import { toast } from 'sonner';
 import Spinner from '@/components/ui/Spinner';
-import { allCountry } from '../../../../public/data/countries';
-import { useCallback } from 'react';
+import { Heading, Text } from '@/components/ui/Typography';
+import { useCreatePropertyMutation } from '@/redux/api/propertiesApi';
+import { submitPropertyFormSchema, SubmitPropertyFormSchema } from '@/schema/submitPropertyForm.schema';
+import { geocodeAddress } from '@/utils/geocode';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/navigation';
+import { useCallback } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { allCountry } from '../../../../public/data/countries';
 
 const SELLER_TYPES = [
 	{ value: 'agent', label: 'Agent' },
@@ -151,6 +151,7 @@ export default function SubmitPropertyPage() {
 			formData.append('property_type', values.propertyType);
 			formData.append('country', values.country);
 			formData.append('street_address', values.address);
+			formData.append('listing_type', values.listingType);
 			formData.append('city', values.city);
 			formData.append('state', values.state);
 			formData.append('zip_code', values.zip);
