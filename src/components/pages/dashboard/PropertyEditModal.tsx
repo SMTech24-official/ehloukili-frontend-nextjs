@@ -20,12 +20,7 @@ const LISTING_TYPES = [
   { value: 'rent', label: 'Rent' },
   { value: 'sale', label: 'Sale' },
 ];
-const PROPERTY_TYPES = [
-  { value: 'townhouse', label: 'Town House' },
-  { value: 'apartment', label: 'Apartment' },
-  { value: 'villa', label: 'Villa' },
-  { value: 'condo', label: 'Condo' },
-];
+
 const PROPERTY_STATES = [
   { value: 'new', label: 'New' },
   { value: 'used', label: 'Used' },
@@ -63,6 +58,7 @@ interface PropertyEditModalProps {
 }
 
 import { toast } from 'sonner';
+import { PROPERTY_TYPES } from '@/app/(defaultLayout)/submit-property/page';
 
 export default function PropertyEditModal({ open, onClose, property, updateProperty, setLoading, setEditOpen, setEditItem, loading }: PropertyEditModalProps) {
   const {

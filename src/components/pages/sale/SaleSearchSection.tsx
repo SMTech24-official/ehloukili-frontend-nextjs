@@ -1,5 +1,6 @@
 'use client';
 
+import { PROPERTY_TYPES } from '@/app/(defaultLayout)/submit-property/page';
 import LocationSelector from '@/components/shared/LocationSelector';
 import Button from '@/components/ui/Button';
 import Select from '@/components/ui/Select';
@@ -114,14 +115,10 @@ const SaleSearchSection: React.FC<SaleSearchSectionProps> = ({
                                 value={filters.propertyType}
                                 onChange={(value: string) => onFiltersChange({ ...filters, propertyType: value })}
                                 options={[
-                                    { value: 'any-type', label: 'Home' },
-                                    { value: 'house', label: 'House' },
-                                    { value: 'apartment', label: 'Apartment' },
-                                    { value: 'condo', label: 'Condo' },
-                                    { value: 'townhouse', label: 'Townhouse' },
-                                    { value: 'villa', label: 'Villa' },
+                                    { value: 'any-type', label: 'Any' },
+                                    ...PROPERTY_TYPES
                                 ]}
-                                placeholder="Home"
+                                placeholder="Any Type"
                                 className="w-full"
                             />
                         </div>

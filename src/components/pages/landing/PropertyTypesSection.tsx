@@ -55,10 +55,10 @@ const PropertyTypesSection: React.FC = () => {
   // Mapping of API property types to demo data titles for accurate image matching
   const typeMapping: { [key: string]: string } = {
     townhouse: 'Town Houses',
-    condo: 'Apartment Buildings',
+    apartment: 'Apartment Buildings',
     villa: 'Modern Villas',
-    singlefamily: 'Single Family',
-    office: 'Office Buildings',
+    'single-family': 'Single Family',
+    'office-building': 'Office Buildings',
   };
 
   // Map API data to property types, ensuring all five demo types are included

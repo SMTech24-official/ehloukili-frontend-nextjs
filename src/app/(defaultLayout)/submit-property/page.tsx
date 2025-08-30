@@ -26,11 +26,12 @@ const LISTING_TYPES = [
 	{ value: 'rent', label: 'Rent' },
 	{ value: 'sale', label: 'Sale' },
 ];
-const PROPERTY_TYPES = [
+export const PROPERTY_TYPES = [
 	{ value: 'townhouse', label: 'Town House' },
 	{ value: 'apartment', label: 'Apartment' },
 	{ value: 'villa', label: 'Villa' },
-	{ value: 'condo', label: 'Condo' },
+	{ value: 'single-family', label: 'Single Family' },
+	{ value: 'office-building', label: 'Office Building' },
 ];
 const PROPERTY_STATES = [
 	{ value: 'new', label: 'New' },
