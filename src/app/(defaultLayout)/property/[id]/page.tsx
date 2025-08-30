@@ -92,7 +92,7 @@ export default function PropertyDetailsPage() {
 
   const handleSaveToggle = async () => {
     if (!user) {
-      toast.error('You must be logged in to save properties');
+      router.push('/auth/login');
       return;
     }
     try {
@@ -113,7 +113,7 @@ export default function PropertyDetailsPage() {
 
   const handleWhatsAppClick = () => {
     if (!user) {
-      toast.error('You must be logged in to contact via WhatsApp');
+      router.push('/auth/login');
       return;
     }
     window?.open('https://wa.me/+880172000000', '_blank');

@@ -41,6 +41,13 @@ export const authApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["User"],
     }),
+    singleUser: builder.query<any, any>({
+      query: (id) => ({
+        url: `/users/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["single-User"],
+    }),
     socialAuth: builder.mutation({
       query: (credentials) => ({
         url: "/auth/social-login",
@@ -108,19 +115,27 @@ export const authApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["User", "all-Users"],
     }),
-    singleUser: builder.query<any, any>({
-      query: (id) => ({
-        url: `/users/${id}`,
-        method: "GET",
-      }),
-      providesTags: ["single-User"],
-    }),
-    allUsers: builder.query<any, any>({
-      query: (role?: string) => ({
-        url: `/users?role=${role}`,
+    allAgents: builder.query<any, void>({
+      query: () => ({
+        url: `/admin/agents`,
         method: "GET",
       }),
       providesTags: ["all-Users"],
+    }),
+    allUsers: builder.query<any, void>({
+      query: () => ({
+        url: `/admin/users`,
+        method: "GET",
+      }),
+      providesTags: ["all-Users"],
+    }),
+    // user details admin/user-details
+    userDetailsByAdmin: builder.query<any, string>({
+      query: (id) => ({
+        url: `/admin/user-details/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["single-User"],
     }),
   }),
 });
@@ -142,4 +157,6 @@ export const {
   useVerifyUserMutation,
   useSingleUserQuery,
   useAllUsersQuery,
+  useAllAgentsQuery,
+  useUserDetailsByAdminQuery
 } = authApi;

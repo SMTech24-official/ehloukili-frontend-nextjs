@@ -1,69 +1,98 @@
-'use client'
+
+'use client';
+
 import DetailsInfoItem from '@/components/shared/DetailsInfoItem';
 import DetailsProfileHeader from '@/components/shared/DetailsProfileHeader';
 import DetailsTabs, { IDetailsTab } from '@/components/shared/DetailsTabs';
 import { useDashboard } from '@/providers/DashboardProvider';
-import { LucideInfo} from 'lucide-react';
+import { LucideInfo } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import { useSingleUserQuery } from '@/redux/api/authApi';
+import { Text } from '@/components/ui/Typography';
+import { useLoading } from '@/providers/LoadingProvider';
 
-const tenant = {
-    id: "T123",
-    name: "John Doe",
-    phone: "+1 555-987-6543",
-    email: "john.doe@email.com",
-    address: "123 Main St. Anytown, USA",
-    city: "Anytown",
-    state: "California",
-    zip_code: "12345"
-};
-
-const tabContents = [
-	// tenants Information
-	(
-        <div key="tenants-info" className="flex flex-col gap-4">
-			<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <DetailsInfoItem label="Full Name" value={tenant.name} />
-                <DetailsInfoItem label="Phone" value={tenant.phone} />
-                <DetailsInfoItem label="Email" value={tenant.email} />
-                <DetailsInfoItem label="Address" value={tenant.address} />
-                <DetailsInfoItem label="City" value={tenant.city} />
-                <DetailsInfoItem label="State" value={tenant.state} />
-                <DetailsInfoItem label="Zip Code" value={tenant.zip_code} />
-			</div>
-		</div>
-	)
-];
-
-const TenantsDetailsPage = () => {
-    const [activeTab, setActiveTab] = useState(0);
+const UserDetailsPage = () => {
+  const [activeTab, setActiveTab] = useState(0);
   const { setPageTitle, setPageSubtitle } = useDashboard();
+    const { setLoading, setLoadingText } = useLoading();
+  const params = useParams();
+  const id = typeof params.id === 'string' ? params.id : '';
+
+  const { data, isLoading, error } = useSingleUserQuery(id);
+
+  useEffect(() => {
+    setPageTitle('My Tenants');
+    setPageSubtitle('All Tenants > Details');
+  }, [setPageTitle, setPageSubtitle]);
+
+  const tabs: IDetailsTab[] = [
+    { label: 'User Information', icon: <LucideInfo className="w-5 h-5" /> },
+  ];
 
     useEffect(() => {
-        setPageTitle('My Tenants');
-        setPageSubtitle('All Tenants > Details');
-    }, [setPageTitle, setPageSubtitle]);
-    const tabs: IDetailsTab[] = [
-        { label: "Tenant Informations", icon: <LucideInfo className="w-5 h-5" /> }
-    ];
-    return (
-        <div className="w-full px-4 py-8 border border-gray-100 shadow rounded-xl">
-            {/* Property Profile Header */}
-            <DetailsProfileHeader
-                imageUrl={'/homePage/modernVilla.svg'}
-                title={tenant.name}
-                id={tenant.id}
-                address={tenant.address}
-            />
+        if (isLoading) {
+            setLoadingText('Loading User Details...');
+            setLoading(true);
+        } else {
+            setLoading(false);
+        }
+    }, [isLoading, setLoading, setLoadingText]);
 
-            {/* Tabs */}
-            <div className="mt-8">
-                <DetailsTabs tabList={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
-                <div className="mt-6 animate-fade-in">
-                    {tabContents[activeTab]}
-                </div>
-            </div>
-        </div>
+  if (error) {
+    let errorMessage = 'An error occurred while loading tenant details.';
+    if ('message' in error && typeof error.message === 'string') {
+      errorMessage = error.message;
+    } else if ('status' in error && typeof error.status === 'number') {
+      errorMessage = `Error code: ${error.status}`;
+    }
+    return (
+      <div className="container mx-auto px-4 py-8 flex items-center justify-center h-screen">
+        <Text color="error">{errorMessage}</Text>
+      </div>
     );
+  }
+
+  if (!data?.profile) {
+    return (
+      <div className="container mx-auto px-4 py-8 flex items-center justify-center h-screen">
+        <Text color="secondary">Tenant not found</Text>
+      </div>
+    );
+  }
+
+  const tenant = data.profile;
+
+  const tabContents = [
+    <div key="tenants-info" className="flex flex-col gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <DetailsInfoItem label="Full Name" value={`${tenant.first_name} ${tenant.last_name}`} />
+        <DetailsInfoItem label="Phone" value={tenant.phone} />
+        <DetailsInfoItem label="Email" value={tenant.email} />
+        <DetailsInfoItem label="Address" value={tenant.address || 'N/A'} />
+        <DetailsInfoItem label="City" value={tenant.city || 'N/A'} />
+        <DetailsInfoItem label="State" value={tenant.state || 'N/A'} />
+        <DetailsInfoItem label="Zip Code" value={tenant.zip_code || 'N/A'} />
+        <DetailsInfoItem label="Country" value={tenant.country || 'N/A'} />
+      </div>
+    </div>,
+  ];
+
+  return (
+    <div className="w-full px-4 py-8 border border-gray-100 shadow rounded-xl">
+      <DetailsProfileHeader
+        imageUrl={tenant.image_url || '/homePage/modernVilla.svg'}
+        title={`${tenant.first_name} ${tenant.last_name}`}
+        id={tenant.id.toString()}
+        address={`${tenant.address || ''}, ${tenant.city || ''}, ${tenant.country || ''}`}
+      />
+
+      <div className="mt-8">
+        <DetailsTabs tabList={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
+        <div className="mt-6 animate-fade-in">{tabContents[activeTab]}</div>
+      </div>
+    </div>
+  );
 };
 
-export default TenantsDetailsPage;
+export default UserDetailsPage;

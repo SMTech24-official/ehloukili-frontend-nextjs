@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 
 
@@ -13,9 +14,18 @@ export const messageApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["messages"],
     }),
+    // get messages
+    getMessages: builder.query<any, void>({
+      query: () => ({
+        url: `/me/messages`,
+        method: "GET",
+      }),
+      providesTags: ["messages"],
+    }),
   })
 })
 
 export const {
   useCreateMessageMutation,
+  useGetMessagesQuery,
 } = messageApi;
