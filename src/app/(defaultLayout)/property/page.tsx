@@ -4,21 +4,31 @@
 import SalePropertiesGrid from '@/components/pages/sale/SalePropertiesGrid';
 import type { SearchFilters } from '@/components/pages/sale/SaleSearchSection';
 import SaleSearchSection from '@/components/pages/sale/SaleSearchSection';
+import { useSearchParams } from 'next/navigation';
 import React from 'react';
 
 const PropertyPage = () => {
-    const [activeTab, setActiveTab] = React.useState<'sale' | 'rent'>('sale');
+    
     const [searchTrigger, setSearchTrigger] = React.useState(0);
+
+        const searchItems = useSearchParams();
+    const city = searchItems.get('city') || '';
+    const type = searchItems.get('type') || 'sale' as 'sale' | 'rent';
+
+    const [activeTab, setActiveTab] = React.useState<'sale' | 'rent'>(
+        type === 'sale' || type === 'rent' ? type : 'sale'
+    );
+
     const [filters, setFilters] = React.useState<SearchFilters>({
         country: '',
-        city: '',
+        city: city || '',
         priceRange: 'any-price',
         propertyType: 'any-type',
         rooms: 'any-rooms',
         status: 'any-status',
     });
     const [filtersPreview, setFiltersPreview] = React.useState<SearchFilters>({
-        city: '',
+        city: city || '',
         country: '',
         priceRange: 'any-price',
         propertyType: 'any-type',

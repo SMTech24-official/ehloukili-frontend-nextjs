@@ -1,9 +1,11 @@
-'use client';
+
+"use client";
 
 import * as React from 'react';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { SectionTitle, Subtitle } from '@/components/ui/Typography';
+import { useGetPropertyTypeCountsQuery } from '@/redux/api/adminApi';
 
 interface CityCardProps {
   cityName: string;
@@ -29,45 +31,75 @@ const CityCard: React.FC<CityCardProps> = ({ cityName, propertyCount, imageUrl }
   );
 };
 
-const cities = [
-  {
-    cityName: 'Chicago',
-    propertyCount: '2,142 Properties',
-    imageUrl: 'https://images.unsplash.com/photo-1494522358652-f30e61a60313?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'
-  },
-  {
-    cityName: 'Los Angeles',
-    propertyCount: '3,847 Properties',
-    imageUrl: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'
-  },
-  {
-    cityName: 'Miami',
-    propertyCount: '1,923 Properties',
-    imageUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'
-  },
-  {
-    cityName: 'Florida',
-    propertyCount: '4,521 Properties',
-    imageUrl: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'
-  },
-  {
-    cityName: 'New York',
-    propertyCount: '6,789 Properties',
-    imageUrl: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'
-  },
-  {
-    cityName: 'Florida',
-    propertyCount: '4,521 Properties',
-    imageUrl: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'
-  },
-  {
-    cityName: 'New York',
-    propertyCount: '6,789 Properties',
-    imageUrl: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'
-  },
+// Array of 20 unique Unsplash image URLs
+const cityImageUrls = [
+  "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=1544&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://plus.unsplash.com/premium_photo-1672116452571-896980a801c8?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1519501025264-65ba15a82390?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1496568816309-51d7c20e3b21?q=80&w=1631&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1514565131-fce0801e5785?q=80&w=1556&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://plus.unsplash.com/premium_photo-1682048358672-1c5c6c9ed2ae?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1516900557549-41557d405adf?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1483653364400-eedcfb9f1f88?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1527956041665-d7a1b380c460?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1495954380655-01609180eda3?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://plus.unsplash.com/premium_photo-1673241100156-2e04fca1a4af?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  // "https://images.unsplash.com/photo-1494522358652-f30e61a60313?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+  // "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+  // "https://images.unsplash.com/photo-1521747116042-5a7c32f04b74?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+  // "https://images.unsplash.com/photo-1514924013411-2a8c9e68b7b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+  // "https://images.unsplash.com/photo-1515902029822-7a6e8f7c7b2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+  // "https://images.unsplash.com/photo-1486326379634-49d86d7c8f62?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+  // "https://images.unsplash.com/photo-1519125323398-675f1f1d1f1e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+  // "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+  // "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+  // "https://images.unsplash.com/photo-1503437313881-1d7b3d3b7e7a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+  // "https://images.unsplash.com/photo-1519046904884-53103b34b206?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+  // "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
 ];
 
+
+
+interface City {
+  cityName: string;
+  propertyCount: string;
+  imageUrl: string;
+}
+
+// interface PropertyTypeCountsResponse {
+//   success: boolean;
+//   counts: { [key: string]: number };
+//   cities: { [key: string]: number };
+// }
+
 const ExploreCitiesSection: React.FC = () => {
+  const { data, isLoading, error } = useGetPropertyTypeCountsQuery(undefined);
+
+  // Function to get a random image URL
+  const getRandomImageUrl = () => {
+    const randomIndex = Math.floor(Math.random() * cityImageUrls.length);
+    return cityImageUrls[randomIndex];
+  };
+
+  // Demo data for loading/error states (only for API-provided cities)
+  const demoCities: City[] = isLoading || error || !data?.success
+    ? Object.entries(data?.cities || { dhaka: 4 }).map(([cityName, count]) => ({
+        cityName: cityName.charAt(0).toUpperCase() + cityName.slice(1),
+        propertyCount: `${count?.toLocaleString()} Properties`,
+        imageUrl: getRandomImageUrl(),
+      }))
+    : [];
+
+  // Map API data to cities, using only API-provided cities
+  const cities: City[] = isLoading || error || !data?.success
+    ? demoCities
+    : Object.entries(data.cities).map(([cityName, count]) => ({
+        cityName: cityName.charAt(0).toUpperCase() + cityName.slice(1),
+        propertyCount: `${count?.toLocaleString()} Properties`,
+        imageUrl: getRandomImageUrl(),
+      }));
+
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [cardsPerView, setCardsPerView] = React.useState(5);
 
@@ -98,7 +130,7 @@ const ExploreCitiesSection: React.FC = () => {
     if (currentIndex > newMaxIndex) {
       setCurrentIndex(newMaxIndex);
     }
-  }, [cardsPerView, currentIndex]);
+  }, [cardsPerView, currentIndex, cities.length]);
 
   const maxIndex = Math.max(0, cities.length - cardsPerView);
 

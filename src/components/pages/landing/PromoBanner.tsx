@@ -1,10 +1,13 @@
+'use client'
 import * as React from 'react';
 import Image from 'next/image';
 import Button from '@/components/ui/Button';
 import { ArrowBigRight } from 'lucide-react';
 import { Heading, Text } from '@/components/ui/Typography';
+import { useRouter } from 'next/navigation';
 
 const PromoBanner: React.FC = () => {
+  const router = useRouter();
   return (
     <section className="lg:py-32 py-20 relative overflow-hidden">
       {/* Background Pattern */}
@@ -26,7 +29,9 @@ const PromoBanner: React.FC = () => {
           Professional real estate development tailored towards you. With love.
           Explore top-tier properties made. Upgrade today.
         </Text>
-        <Button className='!text-white'>
+        <Button
+         onClick={() => router.push('/property')}
+         className='!text-white'>
           View Properties <ArrowBigRight className='w-4 h-4 inline-block ml-1' />
         </Button>
       </div>

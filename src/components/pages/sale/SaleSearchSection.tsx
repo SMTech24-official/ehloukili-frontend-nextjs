@@ -38,9 +38,11 @@ const SaleSearchSection: React.FC<SaleSearchSectionProps> = ({
 }) => {
 
     const router = useRouter();
+
+
     return (
         <section className="bg-white border-b border-gray-200">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div className="container max-w-7xl min-[100rem]:max-w-[96rem] mx-auto px-4 sm:px-6 lg:px-8 py-6">
                 {/* Search Tabs */}
                 <div className="flex justify-center mb-6">
                     <div className="flex gap-1 p-1 bg-gray-100 rounded-lg">
@@ -62,28 +64,6 @@ const SaleSearchSection: React.FC<SaleSearchSectionProps> = ({
                 {/* Filter Bar */}
                 <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-7 gap-4 items-end">
-                        {/* Location */}
-                        {/* <div>
-                            <label className="block text-sm font-medium text-[var(--color-neutral-700)] mb-2">
-                                Location
-                            </label>
-                            <Select
-                                value={filters.location}
-                                onChange={(value: string) => onFiltersChange({ ...filters, location: value })}
-                                options={[
-                                    { value: 'any-location', label: 'Any Location' },
-                                    { value: 'brooklyn', label: 'Brooklyn' },
-                                    { value: 'manhattan', label: 'Manhattan' },
-                                    { value: 'queens', label: 'Queens' },
-                                    { value: 'bronx', label: 'Bronx' },
-                                    { value: 'dhaka', label: 'Dhaka' },
-                                    { value: 'chittagong', label: 'Chittagong' },
-                                    { value: 'sylhet', label: 'Sylhet' },
-                                ]}
-                                placeholder="Any Location"
-                                className="w-full"
-                            />
-                        </div> */}
 
                         <LocationSelector
                             type="country" // or "state"

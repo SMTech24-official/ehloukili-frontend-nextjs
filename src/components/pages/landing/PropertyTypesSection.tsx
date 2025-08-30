@@ -1,6 +1,11 @@
+
+"use client";
+
 import { SectionTitle, Subtitle } from '@/components/ui/Typography';
 import Image from 'next/image';
 import * as React from 'react';
+import { useGetPropertyTypeCountsQuery } from '@/redux/api/adminApi';
+import { useRouter } from 'next/navigation';
 
 interface PropertyTypeCardProps {
   title: string;
@@ -9,8 +14,9 @@ interface PropertyTypeCardProps {
 }
 
 const PropertyTypeCard: React.FC<PropertyTypeCardProps> = ({ title, propertyCount, imageUrl }) => {
+  const router = useRouter();
   return (
-    <div className="group cursor-pointer bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 overflow-hidden min-h-72 relative">
+    <div onClick={() => router.push(`/property`)} className="group cursor-pointer bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 overflow-hidden min-h-72 relative">
       <div className="relative h-72 overflow-hidden">
         <Image
           src={imageUrl}
@@ -27,56 +33,69 @@ const PropertyTypeCard: React.FC<PropertyTypeCardProps> = ({ title, propertyCoun
   );
 };
 
-const propertyTypes = [
-  {
-    title: 'Town Houses',
-    propertyCount: '2,512 Properties',
-    imageUrl: '/homePage/town.svg'
-  },
-  {
-    title: 'Modern Villas',
-    propertyCount: '1,824 Properties',
-    imageUrl: '/homePage/modernVilla.svg'
-  },
-  {
-    title: 'Apartment Buildings',
-    propertyCount: '3,947 Properties',
-    imageUrl: '/homePage/apartment.svg'
-  },
-  {
-    title: 'Single Family',
-    propertyCount: '4,158 Properties',
-    imageUrl: '/homePage/family.svg'
-  },
-  {
-    title: 'Office Buildings',
-    propertyCount: '892 Properties',
-    imageUrl: '/homePage/office.svg'
-  },
-];
+interface PropertyType {
+  title: string;
+  propertyCount: string;
+  imageUrl: string;
+}
+
 
 const PropertyTypesSection: React.FC = () => {
+  const { data, isLoading, error } = useGetPropertyTypeCountsQuery(undefined);
+
+  // Demo data to show during loading or error states, or to fill in missing types
+  const demoPropertyTypes: PropertyType[] = [
+    { title: 'Town Houses', propertyCount: '0 Properties', imageUrl: '/homePage/town.svg' },
+    { title: 'Modern Villas', propertyCount: '0 Properties', imageUrl: '/homePage/modernVilla.svg' },
+    { title: 'Apartment Buildings', propertyCount: '0 Properties', imageUrl: '/homePage/apartment.svg' },
+    { title: 'Single Family', propertyCount: '0 Properties', imageUrl: '/homePage/family.svg' },
+    { title: 'Office Buildings', propertyCount: '0 Properties', imageUrl: '/homePage/office.svg' },
+  ];
+
+  // Mapping of API property types to demo data titles for accurate image matching
+  const typeMapping: { [key: string]: string } = {
+    townhouse: 'Town Houses',
+    condo: 'Apartment Buildings',
+    villa: 'Modern Villas',
+    singlefamily: 'Single Family',
+    office: 'Office Buildings',
+  };
+
+  // Map API data to property types, ensuring all five demo types are included
+  const propertyTypes: PropertyType[] = isLoading || error || !data?.success
+    ? demoPropertyTypes
+    : demoPropertyTypes.map((demo) => {
+        // Find the API type that matches the demo title
+        const apiType = Object.keys(typeMapping).find((key) => typeMapping[key] === demo.title);
+        const count = apiType && data.counts[apiType] !== undefined ? data.counts[apiType] : parseInt(demo.propertyCount.replace(/[^0-9]/g, '')) || 0;
+        return {
+          title: demo.title,
+          propertyCount: `${count.toLocaleString()} Properties`,
+          imageUrl: demo.imageUrl,
+        };
+      });
+
   return (
     <section className="py-20 bg-white">
-        <div className="text-center mb-12">
-          <SectionTitle>
-            Find the Property Type That Fits You
-          </SectionTitle>
-          <Subtitle>
-            Whether it&apos;s a house, apartment, villa, or commercial space - Choose the best property type based on your needs. Explore the perfect place with us.
-          </Subtitle>
-        </div>
+      <div className="text-center mb-12">
+        <SectionTitle>
+          Find the Property Type That Fits You
+        </SectionTitle>
+        <Subtitle>
+          Whether it&apos;s a house, apartment, villa, or commercial space - Choose the best property type based on your needs. Explore the perfect place with us.
+        </Subtitle>
+      </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-          {propertyTypes.map((property, index) => (
-            <PropertyTypeCard
-              key={index}
-              title={property.title}
-              propertyCount={property.propertyCount}
-              imageUrl={property.imageUrl}
-            />
-          ))}
-        </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+        {propertyTypes.map((property, index) => (
+          <PropertyTypeCard
+            key={index}
+            title={property.title}
+            propertyCount={property.propertyCount}
+            imageUrl={property.imageUrl}
+          />
+        ))}
+      </div>
     </section>
   );
 };
