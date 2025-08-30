@@ -8,7 +8,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
         <>
             <div className="h-screen flex flex-col md:flex-row font-roboto bg-white overflow-hidden container mx-auto">
                 {/* Left: Logo and Form */}
-                <div className="flex flex-col w-full md:w-1/2 min-h-screen">
+                <div className="flex flex-col w-full lg:w-1/2 min-h-screen">
                     {/* Logo top left */}
                     <div className="flex items-center gap-2 px-6 pt-6 md:pt-10 md:px-12">
                        <Logo />
@@ -21,7 +21,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
                     </div>
                 </div>
                 {/* Right: Illustration */}
-                <div className="hidden md:flex w-1/2 min-h-screen items-center justify-center bg-[#F8F8F8]">
+                <div className="hidden lg:flex w-1/2 min-h-screen items-center justify-center bg-[#F8F8F8]">
                     <Image
                         src="/signupRight.svg"
                         alt="Sign up visual"
