@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+'use client'
 import * as React from 'react';
 
 import { Text } from '@/components/ui/Typography';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 
 interface MapPropertyPopupProps {
@@ -11,8 +13,8 @@ interface MapPropertyPopupProps {
 }
 
 const MapPropertyPopup: React.FC<MapPropertyPopupProps> = ({ property, small }) => {
+  const router = useRouter();
   if (!small) {
-    // fallback to full card if needed
     return (
       <div style={{ minWidth: 300, maxWidth: 320 }}>
         <div className="p-2">
@@ -25,7 +27,8 @@ const MapPropertyPopup: React.FC<MapPropertyPopupProps> = ({ property, small }) 
   }
   return (
     <div
-      className="bg-white rounded-lg shadow border border-gray-200 w-full p-4"
+    onClick={() => router.push(`/property/${property.id}`)}
+      className="bg-white rounded-lg shadow border border-gray-200 w-full p-4 cursor-pointer"
     // style={{ minWidth: 140, maxWidth: 180, padding: 8 }}
     >
       <div className="relative w-full h-20 rounded overflow-hidden mb-2">
