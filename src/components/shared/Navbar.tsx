@@ -6,12 +6,13 @@ import { useGetSavedPropertiesQuery } from '@/redux/api/propertiesApi';
 import { ChevronDown, Heart, Menu, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import * as React from 'react';
 
 const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
 
   const { data: user } = useGetMeQuery();
@@ -77,7 +78,7 @@ const Navbar: React.FC = () => {
           {/* Right side - Auth and Language */}
           <div className="hidden lg:flex items-center space-x-6">
             {/* Favorites */}
-            <button className="relative p-2 text-[var(--color-neutral-700)] hover:text-[var(--color-secondary-600)] transition-colors">
+            <button onClick={() => router.push('/user-dashboard/saved-properties')} className="relative p-2 text-[var(--color-neutral-700)] hover:text-[var(--color-secondary-600)] transition-colors">
               <Heart className="w-5 h-5" />
               <span className="absolute -top-1 -right-1 bg-[var(--color-secondary-600)] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                 {
