@@ -2,6 +2,7 @@
 import LogoutModal from "@/components/shared/LogoutModal";
 import { useLogoutModal } from "@/hooks/useLogout";
 import { DashboardProvider, useDashboard } from "@/providers/DashboardProvider";
+import { useGetMeQuery } from "@/redux/api/authApi";
 import { Building2, DollarSignIcon, Home, LogOut, Menu, Tag, Users, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -119,6 +120,7 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
 
 function DashboardHeader() {
     const { pageTitle, pageSubtitle } = useDashboard();
+      const { data: user } = useGetMeQuery();
 
     return (
         <header className="flex-shrink-0 bg-white dark:bg-[var(--color-neutral-900)] border-b border-gray-200 dark:border-[var(--color-neutral-800)] px-4 sm:px-6 lg:px-8 py-4">
@@ -138,7 +140,7 @@ function DashboardHeader() {
                 {/* User Profile */}
                 <div className="flex items-center gap-3 bg-[var(--color-neutral-50)] dark:bg-[var(--color-neutral-800)] px-3 py-2 rounded-lg border border-gray-200 dark:border-[var(--color-neutral-700)] flex-shrink-0">
                     <Image
-                        src="/user-avatar.svg"
+                        src={user?.profile?.image_url ? user?.profile?.image_url : "/user-avatar.svg"}
                         alt="User Avatar"
                         width={32}
                         height={32}
@@ -146,10 +148,14 @@ function DashboardHeader() {
                     />
                     <div className="text-right hidden sm:block">
                         <div className="font-medium text-sm text-[var(--color-neutral-900)] dark:text-[var(--color-neutral-50)]">
-                            Robert Allen
+                            {
+                                user?.profile?.firstName ? `${user?.profile?.firstName}` : "Unknown User"
+                            }
                         </div>
                         <div className="text-xs text-[var(--color-neutral-500)] dark:text-[var(--color-neutral-400)]">
-                            HR Manager
+                            {
+                                user?.profile?.role ? `${user?.profile?.role}` : "Unknown Role"
+                            }
                         </div>
                     </div>
                 </div>
