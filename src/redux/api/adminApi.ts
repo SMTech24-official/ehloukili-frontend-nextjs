@@ -19,10 +19,18 @@ export const adminApi = baseApi.injectEndpoints({
       }),
       providesTags: ["agent-stats"],
     }),
+    getPropertyTypeCounts: builder.query<any, void>({
+      query: () => ({
+        url: `/property-type-counts`,
+        method: "GET",
+      }),
+      providesTags: ["property-type-counts"],
+    }),
   })
 })
 
 export const {
     useGetAdminStatsQuery,
   useGetAgentStatsQuery,
+  useGetPropertyTypeCountsQuery,
 } = adminApi;
