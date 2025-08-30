@@ -77,6 +77,30 @@ export const propertiesApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["properties", "own-properties", "all-properties"],
     }),
+    // save property
+    saveProperty: builder.mutation({
+      query: (id) => ({
+        url: `/properties/${id}/save`,
+        method: "POST",
+      }),
+      invalidatesTags: ["properties", "own-properties", "all-properties","save-properties"],
+    }),
+    //unsave property
+    unsaveProperty: builder.mutation({
+      query: (id) => ({
+        url: `/properties/${id}/unsave`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["properties", "own-properties", "all-properties","save-properties"],
+    }),
+    // get save property
+    getSavedProperties: builder.query<any, void>({
+      query: () => ({
+        url: `/me/saved-properties`,
+        method: "GET",
+      }),
+      providesTags: ["save-properties"],
+    }),
 
   })
 })
@@ -89,4 +113,7 @@ export const {
   useGetSinglePropertyQuery,
   useDeletePropertyMutation,
   useChangePropertyStatusMutation,
+  useSavePropertyMutation,
+  useUnsavePropertyMutation,
+  useGetSavedPropertiesQuery
 } = propertiesApi;
