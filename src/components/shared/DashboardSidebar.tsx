@@ -2,7 +2,7 @@
 'use client'
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { User, LogOut, Heart, ChevronRight } from 'lucide-react';
+import { User, LogOut, Heart, ChevronRight, TrendingUp } from 'lucide-react';
 import Image from 'next/image';
 import React from 'react';
 import { useLogoutModal } from '@/hooks/useLogout';
@@ -15,6 +15,7 @@ export interface DashboardSidebarProps {
 const navItems = [
   { key: 'profile', label: 'My Profile', icon: <User size={18} />, href: '/user-dashboard/profile' },
   { key: 'saved', label: 'Save Property', icon: <Heart size={18} />, href: '/user-dashboard/saved-properties' },
+  { key: 'market_trends', label: 'Market Trends', icon: <TrendingUp size={18} />, href: '/user-dashboard/market-trends' },
   { key: 'dashboard', label: 'Dashboard', icon: <Heart size={18} />, href: '/agent/dashboard' },
 ];
 // const NAV_ITEMS_AGENT = [
@@ -70,12 +71,12 @@ export default function DashboardSidebar({ user, onNav }: DashboardSidebarProps)
           </li>
         </ul>
       </nav>
-           <LogoutModal
-                      open={isLogoutModal}
-                      loading={isLoading}
-                      onConfirm={handleLogout}
-                      onCancel={hideModal}
-                  />
+      <LogoutModal
+        open={isLogoutModal}
+        loading={isLoading}
+        onConfirm={handleLogout}
+        onCancel={hideModal}
+      />
     </aside>
   );
 }

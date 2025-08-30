@@ -25,7 +25,7 @@ const columns = [
 
 
 
-const PricingPage = () => {
+const SubscriptionPage = () => {
     const router = useRouter();
     const { setPageTitle, setPageSubtitle } = useDashboard();
     const { data, isLoading } = useGetAllSubscriptionsQuery();
@@ -33,8 +33,8 @@ const PricingPage = () => {
 
 
     useEffect(() => {
-        setPageTitle('Pricing');
-        setPageSubtitle('Manage Your Pricing Plans');
+        setPageTitle('Subscriptions');
+        setPageSubtitle('Manage Your Subscription Plans');
     }, [setPageTitle, setPageSubtitle]);
 
     // Global loading overlay for fetching subscriptions
@@ -109,4 +109,4 @@ const PricingPage = () => {
     );
 };
 
-export default PricingPage;
+export default SubscriptionPage;

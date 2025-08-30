@@ -26,6 +26,20 @@ export const adminApi = baseApi.injectEndpoints({
       }),
       providesTags: ["property-type-counts"],
     }),
+    getValueTracking: builder.query<any, void>({
+      query: () => ({
+        url: `/dashboard/value-tracking`,
+        method: "GET",
+      }),
+      providesTags: ["value-tracking"],
+    }),
+    getMarketTrends: builder.query<any, void>({
+      query: () => ({
+        url: `/dashboard/market-trends`,
+        method: "GET",
+      }),
+      providesTags: ["market-trends"],
+    }),
   })
 })
 
@@ -33,4 +47,6 @@ export const {
     useGetAdminStatsQuery,
   useGetAgentStatsQuery,
   useGetPropertyTypeCountsQuery,
+  useGetValueTrackingQuery,
+  useGetMarketTrendsQuery,
 } = adminApi;

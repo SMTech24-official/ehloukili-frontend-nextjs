@@ -32,6 +32,7 @@ const adminNavItems = [
     },
     { label: "Pricing Plan", icon: <Tag size={20} />, href: "/admin/pricing" },
     { label: "Subscriptions", icon: <DollarSignIcon size={20} />, href: "/admin/subscriptions" },
+    { label: "Contacts", icon: <DollarSignIcon size={20} />, href: "/admin/contacts" },
 ];
 
 function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
