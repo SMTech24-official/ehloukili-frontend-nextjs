@@ -10,6 +10,8 @@ import { Controller, useForm } from 'react-hook-form';
 // No Dialog component found, use a simple custom modal
 import Spinner from '@/components/ui/Spinner';
 import { allCountry } from '../../../../public/data/countries';
+import { toast } from 'sonner';
+import { PROPERTY_TYPES } from '@/constant/property';
 
 const SELLER_TYPES = [
   { value: 'agent', label: 'Agent' },
@@ -57,8 +59,7 @@ interface PropertyEditModalProps {
   loading?: boolean;
 }
 
-import { toast } from 'sonner';
-import { PROPERTY_TYPES } from '@/app/(defaultLayout)/submit-property/page';
+
 
 export default function PropertyEditModal({ open, onClose, property, updateProperty, setLoading, setEditOpen, setEditItem, loading }: PropertyEditModalProps) {
   const {

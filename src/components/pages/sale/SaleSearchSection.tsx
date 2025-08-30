@@ -1,9 +1,9 @@
 'use client';
 
-import { PROPERTY_TYPES } from '@/app/(defaultLayout)/submit-property/page';
 import LocationSelector from '@/components/shared/LocationSelector';
 import Button from '@/components/ui/Button';
 import Select from '@/components/ui/Select';
+import { PROPERTY_TYPES } from '@/constant/property';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';

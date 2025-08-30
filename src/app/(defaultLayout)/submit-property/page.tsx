@@ -26,7 +26,7 @@ const LISTING_TYPES = [
 	{ value: 'rent', label: 'Rent' },
 	{ value: 'sale', label: 'Sale' },
 ];
-export const PROPERTY_TYPES = [
+const PROPERTY_TYPES = [
 	{ value: 'townhouse', label: 'Town House' },
 	{ value: 'apartment', label: 'Apartment' },
 	{ value: 'villa', label: 'Villa' },
