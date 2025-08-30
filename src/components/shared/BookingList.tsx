@@ -39,9 +39,9 @@ const BookingList: React.FC<BookingListProps> = ({ items }) => {
                     ))}
                 </tbody>
             </table>
-            <div className="flex justify-end mt-2">
+            {/* <div className="flex justify-end mt-2">
                 <button className="text-[var(--color-primary-600)] dark:text-[var(--color-primary-200)] text-sm font-medium hover:underline transition">View All</button>
-            </div>
+            </div> */}
         </div>
     );
 };
