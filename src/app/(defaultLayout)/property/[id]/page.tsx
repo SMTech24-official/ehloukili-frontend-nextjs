@@ -10,19 +10,63 @@ import { useParams, useRouter } from 'next/navigation';
 import Button from '@/components/ui/Button';
 import DateInput from '@/components/ui/DateInput';
 import { Heading, Text } from '@/components/ui/Typography';
-import dynamic from 'next/dynamic';
-import 'leaflet/dist/leaflet.css';
 import { useGetSavedPropertiesQuery, useGetSinglePropertyQuery, useSavePropertyMutation, useUnsavePropertyMutation } from '@/redux/api/propertiesApi';
 import { useGetMeQuery } from '@/redux/api/authApi';
 import { toast } from 'sonner';
 import Spinner from '@/components/ui/Spinner';
 import { useCreateMessageMutation } from '@/redux/api/MessageApi';
 
-// Dynamic imports for Leaflet
-const MapContainer = dynamic(() => import('react-leaflet').then(mod => mod.MapContainer), { ssr: false });
-const TileLayer = dynamic(() => import('react-leaflet').then(mod => mod.TileLayer), { ssr: false });
-const Marker = dynamic(() => import('react-leaflet').then(mod => mod.Marker), { ssr: false });
-const Popup = dynamic(() => import('react-leaflet').then(mod => mod.Popup), { ssr: false });
+// Google Maps
+import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
+
+// Styles
+const mapContainerStyle = {
+  width: '100%',
+  height: '100%',
+};
+
+const defaultOptions = {
+  disableDefaultUI: false,
+  zoomControl: true,
+};
+
+// Nearby Places Component
+function NearbyPlaces({ coordinates, type }: { coordinates: [number, number]; type: string }) {
+  const [places, setPlaces] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (!type) return;
+
+    const service = new google.maps.places.PlacesService(document.createElement('div'));
+
+    const request = {
+      location: new google.maps.LatLng(coordinates[0], coordinates[1]),
+      radius: 2000, // 2km
+      type: type,
+    };
+
+    service.nearbySearch(request, (results, status) => {
+      if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+        setPlaces(results);
+      }
+    });
+  }, [coordinates, type]);
+
+  return (
+    <>
+      {places.map((place, index) => (
+        <Marker
+          key={index}
+          position={{
+            lat: place.geometry?.location?.lat(),
+            lng: place.geometry?.location?.lng(),
+          }}
+          title={place.name}
+        />
+      ))}
+    </>
+  );
+}
 
 export default function PropertyDetailsPage() {
   const [activeTab, setActiveTab] = useState('Map');
@@ -41,24 +85,9 @@ export default function PropertyDetailsPage() {
   const { data: user } = useGetMeQuery();
   const { data: savedProperties } = useGetSavedPropertiesQuery(undefined, { skip: !user });
   const { data, isLoading, error } = useGetSinglePropertyQuery(id);
-  const [saveProperty, { isLoading: isSaving, error: saveError }] = useSavePropertyMutation();
-  const [unsaveProperty, { isLoading: isUnsaving, error: unsaveError }] = useUnsavePropertyMutation();
+  const [saveProperty, { isLoading: isSaving }] = useSavePropertyMutation();
+  const [unsaveProperty, { isLoading: isUnsaving }] = useUnsavePropertyMutation();
   const [createMessage, { isLoading: isSendingMessage }] = useCreateMessageMutation();
-
-  // Fix Leaflet default marker icon issue
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      import('leaflet').then((L) => {
-        const DefaultIcon = L.Icon.Default.prototype as unknown as { _getIconUrl?: () => void };
-        delete DefaultIcon._getIconUrl;
-        L.Icon.Default.mergeOptions({
-          iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-          iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-          shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-        });
-      });
-    }
-  }, []);
 
   // Initialize isSaved based on savedProperties
   useEffect(() => {
@@ -214,92 +243,12 @@ export default function PropertyDetailsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column - Main Content */}
         <div className="lg:col-span-2 space-y-8">
-          {/* Description Card */}
+          {/* Description */}
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <Heading level={4} className="text-xl font-semibold mb-4">
               Description
             </Heading>
             <Text className="text-gray-600 leading-relaxed">{property.property_description}</Text>
-          </div>
-
-          {/* Property Details Card */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <Heading level={4} className="text-xl font-semibold mb-6">
-              Property Details
-            </Heading>
-
-            {/* Basic Details */}
-            <div className="grid grid-cols-3 gap-4 mb-6 text-center">
-              <div>
-                <Text size="sm" color="muted" className="text-gray-500 text-sm">
-                  Lot Area
-                </Text>
-                <Text weight="semibold">{property.lot_area} sqm</Text>
-              </div>
-              <div>
-                <Text size="sm" color="muted" className="text-gray-500 text-sm">
-                  Year Built
-                </Text>
-                <Text weight="semibold">{property.year_built}</Text>
-              </div>
-              <div>
-                <Text size="sm" color="muted" className="text-gray-500 text-sm">
-                  Type
-                </Text>
-                <Text weight="semibold">{property.property_type}</Text>
-              </div>
-            </div>
-
-            {/* Highlighted Details */}
-            <div className="grid grid-cols-4 gap-4 bg-gray-50 rounded-lg p-4">
-              <div className="text-center">
-                <Heading level={3} className="text-2xl font-bold text-primary-600">
-                  {property.bedrooms}
-                </Heading>
-                <Text size="sm" color="muted" className="text-gray-500 text-sm">
-                  Bedrooms
-                </Text>
-              </div>
-              <div className="text-center">
-                <Heading level={3} className="text-2xl font-bold text-primary-600">
-                  {property.bathrooms}
-                </Heading>
-                <Text size="sm" color="muted" className="text-gray-500 text-sm">
-                  Bathrooms
-                </Text>
-              </div>
-              <div className="text-center">
-                <Heading level={3} className="text-2xl font-bold text-primary-600">
-                  {property.unit_area}
-                </Heading>
-                <Text size="sm" color="muted" className="text-gray-500 text-sm">
-                  sqm Total
-                </Text>
-              </div>
-              <div className="text-center">
-                <Heading level={3} className="text-2xl font-bold text-primary-600">
-                  {property.exterior_features.includes('Parking Space') ? 'Yes' : 'No'}
-                </Heading>
-                <Text size="sm" color="muted" className="text-gray-500 text-sm">
-                  Parking
-                </Text>
-              </div>
-            </div>
-          </div>
-
-          {/* Amenities Card */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <Heading level={4} className="text-xl font-semibold mb-6">
-              Amenities
-            </Heading>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {amenities.map((amenity, index) => (
-                <div key={index} className="flex items-center gap-3">
-                  <span className="text-xl">{amenity.icon}</span>
-                  <Text className="text-gray-700">{amenity.name}</Text>
-                </div>
-              ))}
-            </div>
           </div>
 
           {/* Location Information */}
@@ -325,36 +274,34 @@ export default function PropertyDetailsPage() {
               ))}
             </div>
 
-            {/* Map */}
+            {/* Google Map */}
             <div className="h-64 rounded-lg overflow-hidden">
-              {typeof window !== 'undefined' && coordinates[0] !== 0 && coordinates[1] !== 0 ? (
-                <MapContainer
-                  center={coordinates}
-                  zoom={13}
-                  style={{ height: '100%', width: '100%' }}
-                  className="rounded-lg"
-                >
-                  <TileLayer
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                  />
-                  <Marker position={coordinates}>
-                    <Popup>
-                      <div className="text-center">
-                        <strong>
-                          {property.street_address}, {property.city}
-                        </strong>
-                        <br />
-                        {property.city}, {property.country}
-                        <br />
-                        <span className="text-primary-600 font-semibold">
-                          ${property.price}
-                          {property.listing_type === 'sale' ? '' : '/month'}
-                        </span>
-                      </div>
-                    </Popup>
-                  </Marker>
-                </MapContainer>
+              {coordinates[0] !== 0 && coordinates[1] !== 0 ? (
+                <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''} libraries={['places']}>
+                  <GoogleMap
+                    mapContainerStyle={mapContainerStyle}
+                    center={{ lat: coordinates[0], lng: coordinates[1] }}
+                    zoom={14}
+                    options={defaultOptions}
+                  >
+                    <Marker position={{ lat: coordinates[0], lng: coordinates[1] }} />
+
+                    {activeTab !== 'Map' && (
+                      <NearbyPlaces
+                        coordinates={coordinates}
+                        type={
+                          activeTab === 'School'
+                            ? 'school'
+                            : activeTab === 'Public transport'
+                            ? 'transit_station'
+                            : activeTab === 'Mosques'
+                            ? 'mosque'
+                            : ''
+                        }
+                      />
+                    )}
+                  </GoogleMap>
+                </LoadScript>
               ) : (
                 <div className="h-64 bg-gray-100 rounded-lg flex items-center justify-center">
                   <Text color="muted">Map unavailable</Text>
@@ -382,9 +329,7 @@ export default function PropertyDetailsPage() {
               />
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Message
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
                 <textarea
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
