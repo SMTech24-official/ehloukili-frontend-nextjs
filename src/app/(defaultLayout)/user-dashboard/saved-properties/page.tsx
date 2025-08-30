@@ -37,9 +37,9 @@ const SavedPropertiesPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {properties.length > 0 ? (
+      {properties?.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
-          {properties.map((property: any) => (
+          {properties?.map((property: any) => (
             <FeaturedPropertyCard
               key={property.id}
               id={property.id.toString()}

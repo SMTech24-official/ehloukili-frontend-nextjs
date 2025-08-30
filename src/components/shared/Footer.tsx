@@ -65,10 +65,10 @@ const Footer: React.FC = () => {
               <div className="space-y-6">
                 <h4 className="text-lg font-semibold text-white">Popular Search</h4>
                 <ul className="space-y-3">
-                  <li><Link href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Apartment for Sale</Link></li>
-                  <li><Link href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Apartment for Rent</Link></li>
-                  <li><Link href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Offices for Sale</Link></li>
-                  <li><Link href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Offices for Rent</Link></li>
+                  <li><Link href="/property" className="text-gray-400 hover:text-white transition-colors text-sm">Apartment for Sale</Link></li>
+                  <li><Link href="/property" className="text-gray-400 hover:text-white transition-colors text-sm">Apartment for Rent</Link></li>
+                  <li><Link href="/property" className="text-gray-400 hover:text-white transition-colors text-sm">Offices for Sale</Link></li>
+                  <li><Link href="/property" className="text-gray-400 hover:text-white transition-colors text-sm">Offices for Rent</Link></li>
                 </ul>
               </div>
 

@@ -2,6 +2,7 @@
 
 import Button from '@/components/ui/Button';
 import { useGetMeQuery } from '@/redux/api/authApi';
+import { useGetSavedPropertiesQuery } from '@/redux/api/propertiesApi';
 import { ChevronDown, Heart, Menu, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -14,6 +15,7 @@ const Navbar: React.FC = () => {
 
 
   const { data: user } = useGetMeQuery();
+  const { data: savedProperties } = useGetSavedPropertiesQuery(undefined);
 
   // Helper function to determine if a link is active
   const isActiveLink = (href: string) => {
@@ -78,7 +80,9 @@ const Navbar: React.FC = () => {
             <button className="relative p-2 text-[var(--color-neutral-700)] hover:text-[var(--color-secondary-600)] transition-colors">
               <Heart className="w-5 h-5" />
               <span className="absolute -top-1 -right-1 bg-[var(--color-secondary-600)] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                0
+                {
+                  savedProperties?.data?.length || 0
+                }
               </span>
             </button>
 
